@@ -36,9 +36,11 @@ fun SignInScreen(
         }
     )
 
+    fun showErrorMessage(message: String?) = makeText(context, message, LENGTH_LONG).show()
+
     SignIn(
         showErrorMessage = { e ->
-            makeText(context, e.message, LENGTH_LONG).show()
+            showErrorMessage(e.message)
         }
     )
 }
