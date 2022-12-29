@@ -11,7 +11,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.SignI
 @Composable
 fun SignIn(
     viewModel: SignInViewModel = hiltViewModel(),
-    showErrorMessage: (e: Exception) -> Unit
+    showErrorMessage: (errorMessage: String?) -> Unit
 ) {
     when(val signInResponse = viewModel.signInResponse) {
         is Loading -> ProgressBar()
@@ -19,7 +19,7 @@ fun SignIn(
         is Failure -> signInResponse.apply {
             LaunchedEffect(e) {
                 print(e)
-                showErrorMessage(e)
+                showErrorMessage(e.message)
             }
         }
     }

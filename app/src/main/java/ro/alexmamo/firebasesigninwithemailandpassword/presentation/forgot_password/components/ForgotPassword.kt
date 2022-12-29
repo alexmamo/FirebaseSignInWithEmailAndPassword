@@ -13,7 +13,7 @@ fun ForgotPassword(
     viewModel: ForgotPasswordViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
     showResetPasswordMessage: () -> Unit,
-    showErrorMessage: (e: Exception) -> Unit
+    showErrorMessage: (errorMessage: String?) -> Unit
 ) {
     when(val sendPasswordResetEmailResponse = viewModel.sendPasswordResetEmailResponse) {
         is Loading -> ProgressBar()
@@ -29,7 +29,7 @@ fun ForgotPassword(
         is Failure -> sendPasswordResetEmailResponse.apply {
             LaunchedEffect(e) {
                 print(e)
-                showErrorMessage(e)
+                showErrorMessage(e.message)
             }
         }
     }

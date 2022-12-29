@@ -1,7 +1,5 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components
 
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.makeText
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.Composable
@@ -16,6 +14,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.REVOKE_ACCE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SENSITIVE_OPERATION_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Utils.Companion.print
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Utils.Companion.showMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.*
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.ProfileViewModel
 
@@ -27,8 +26,6 @@ fun RevokeAccess(
     signOut: () -> Unit,
 ) {
     val context = LocalContext.current
-
-    fun showAccessRevokedMessage() = makeText(context, ACCESS_REVOKED_MESSAGE, LENGTH_LONG).show()
 
     fun showRevokeAccessMessage() = coroutineScope.launch {
         val result = scaffoldState.snackbarHostState.showSnackbar(
@@ -46,7 +43,7 @@ fun RevokeAccess(
             val isAccessRevoked = revokeAccessResponse.data
             LaunchedEffect(isAccessRevoked) {
                 if (isAccessRevoked) {
-                    showAccessRevokedMessage()
+                    showMessage(context, ACCESS_REVOKED_MESSAGE)
                 }
             }
         }

@@ -1,12 +1,11 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in
 
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.makeText
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Utils.Companion.showMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignIn
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInTopBar
@@ -36,11 +35,9 @@ fun SignInScreen(
         }
     )
 
-    fun showErrorMessage(message: String?) = makeText(context, message, LENGTH_LONG).show()
-
     SignIn(
-        showErrorMessage = { e ->
-            showErrorMessage(e.message)
+        showErrorMessage = { errorMessage ->
+            showMessage(context, errorMessage)
         }
     )
 }

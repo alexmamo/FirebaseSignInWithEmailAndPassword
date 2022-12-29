@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
             if (viewModel.isEmailVerified) {
                 NavigateToProfileScreen()
             } else {
-                NavigateToSignUpCompleteScreen()
+                NavigateToVerifyEmailScreen()
             }
         }
     }
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun NavigateToSignUpCompleteScreen() = navController.navigate(VerifyEmailScreen.route) {
+    private fun NavigateToVerifyEmailScreen() = navController.navigate(VerifyEmailScreen.route) {
         popUpTo(SignInScreen.route) {
             inclusive = true
         }
