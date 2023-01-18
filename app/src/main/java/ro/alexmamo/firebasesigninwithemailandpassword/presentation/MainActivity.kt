@@ -47,18 +47,22 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun NavigateToSignInScreen() = navController.navigate(SignInScreen.route)
+    private fun NavigateToSignInScreen() = navController.navigate(SignInScreen.route) {
+        popUpTo(navController.graph.id) {
+            inclusive = true
+        }
+    }
 
     @Composable
     private fun NavigateToProfileScreen() = navController.navigate(ProfileScreen.route) {
-        popUpTo(SignInScreen.route) {
+        popUpTo(navController.graph.id) {
             inclusive = true
         }
     }
 
     @Composable
     private fun NavigateToVerifyEmailScreen() = navController.navigate(VerifyEmailScreen.route) {
-        popUpTo(SignInScreen.route) {
+        popUpTo(navController.graph.id) {
             inclusive = true
         }
     }

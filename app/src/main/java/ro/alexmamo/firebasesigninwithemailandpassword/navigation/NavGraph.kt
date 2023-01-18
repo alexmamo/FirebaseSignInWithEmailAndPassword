@@ -63,7 +63,7 @@ fun NavGraph(
             VerifyEmailScreen(
                 navigateToProfileScreen = {
                     navController.navigate(ProfileScreen.route) {
-                        popUpTo(SignInScreen.route) {
+                        popUpTo(navController.graph.id) {
                             inclusive = true
                         }
                     }
