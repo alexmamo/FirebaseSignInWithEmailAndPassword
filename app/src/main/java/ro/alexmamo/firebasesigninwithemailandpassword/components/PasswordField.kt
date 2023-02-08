@@ -3,8 +3,8 @@ package ro.alexmamo.firebasesigninwithemailandpassword.components
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.PASSWORD_HINT
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.PASSWORD_LABEL
 
 @Composable
 fun PasswordField(
@@ -22,14 +22,14 @@ fun PasswordField(
 ) {
     var passwordIsVisible by remember { mutableStateOf(false) }
 
-    TextField(
+    OutlinedTextField(
         value = password,
         onValueChange = { newValue ->
             onPasswordValueChange(newValue)
         },
-        placeholder = {
+        label = {
             Text(
-                text = PASSWORD_HINT
+                text = PASSWORD_LABEL
             )
         },
         singleLine = true,

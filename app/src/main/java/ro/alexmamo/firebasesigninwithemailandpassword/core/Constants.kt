@@ -18,9 +18,9 @@ object Constants {
     const val VERIFY_EMAIL_SCREEN = "Verify email"
     const val PROFILE_SCREEN = "Profile"
 
-    //Hints
-    const val EMAIL_HINT = "Type an email..."
-    const val PASSWORD_HINT = "Type a password..."
+    //Labels
+    const val EMAIL_LABEL = "Email"
+    const val PASSWORD_LABEL = "Password"
 
     //Useful
     const val NO_VALUE = ""

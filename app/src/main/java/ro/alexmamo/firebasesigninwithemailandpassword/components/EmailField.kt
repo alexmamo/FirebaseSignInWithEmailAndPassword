@@ -1,8 +1,8 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.components
 
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -11,7 +11,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import kotlinx.coroutines.job
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMAIL_HINT
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMAIL_LABEL
 
 @Composable
 fun EmailField(
@@ -20,14 +20,14 @@ fun EmailField(
 ) {
     val focusRequester = FocusRequester()
 
-    TextField(
+    OutlinedTextField(
         value = email,
         onValueChange = { newValue ->
             onEmailValueChange(newValue)
         },
-        placeholder = {
+        label = {
             Text(
-                text = EMAIL_HINT
+                text = EMAIL_LABEL
             )
         },
         singleLine = true,
