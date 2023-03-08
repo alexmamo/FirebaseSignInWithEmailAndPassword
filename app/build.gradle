@@ -39,7 +39,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
-    namespace "ro.alexmamo.firebasesigninwithemailandpassword"
 }
 
 dependencies {
