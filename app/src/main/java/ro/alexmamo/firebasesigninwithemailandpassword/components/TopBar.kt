@@ -9,8 +9,8 @@ import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.REVOKE_ACCESS
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.REVOKE_ACCESS_ITEM
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT_ITEM
 
 @Composable
 fun TopBar(
@@ -60,7 +60,7 @@ fun TopBar(
                     }
                 ) {
                     Text(
-                        text = SIGN_OUT
+                        text = SIGN_OUT_ITEM
                     )
                 }
                 DropdownMenuItem(
@@ -70,7 +70,7 @@ fun TopBar(
                     }
                 ) {
                     Text(
-                        text = REVOKE_ACCESS
+                        text = REVOKE_ACCESS_ITEM
                     )
                 }
             }

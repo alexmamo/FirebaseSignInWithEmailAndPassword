@@ -19,8 +19,8 @@ import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.PasswordField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.SmallSpacer
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.ALREADY_USER
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.NO_VALUE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_UP
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMPTY_STRING
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_UP_BUTTON
 
 @Composable
 @ExperimentalComposeUiApi
@@ -31,10 +31,18 @@ fun SignUpContent(
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(NO_VALUE)) }
+    ) { mutableStateOf(
+        value = TextFieldValue(
+            text = EMPTY_STRING
+        )
+    ) }
     var password by rememberSaveable(
         stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(NO_VALUE)) }
+    ) { mutableStateOf(
+        value = TextFieldValue(
+            text = EMPTY_STRING
+        )
+    ) }
     val keyboard = LocalSoftwareKeyboardController.current
 
     Column(
@@ -65,7 +73,7 @@ fun SignUpContent(
             }
         ) {
             Text(
-                text = SIGN_UP,
+                text = SIGN_UP_BUTTON,
                 fontSize = 15.sp
             )
         }

@@ -14,8 +14,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.SmallSpacer
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.NO_VALUE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.RESET_PASSWORD
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMPTY_STRING
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.RESET_PASSWORD_BUTTON
 
 @Composable
 fun ForgotPasswordContent(
@@ -24,7 +24,11 @@ fun ForgotPasswordContent(
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(NO_VALUE)) }
+    ) { mutableStateOf(
+        value = TextFieldValue(
+            text = EMPTY_STRING
+        )
+    ) }
 
     Column(
         modifier = Modifier
@@ -46,7 +50,7 @@ fun ForgotPasswordContent(
             }
         ) {
             Text(
-                text = RESET_PASSWORD,
+                text = RESET_PASSWORD_BUTTON,
                 fontSize = 15.sp
             )
         }

@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.PasswordField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.SmallSpacer
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMPTY_STRING
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.FORGOT_PASSWORD
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.NO_ACCOUNT
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.NO_VALUE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_IN
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_IN_BUTTON
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.VERTICAL_DIVIDER
 
 @Composable
@@ -36,10 +36,18 @@ fun SignInContent(
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(NO_VALUE)) }
+    ) { mutableStateOf(
+        value = TextFieldValue(
+            text = EMPTY_STRING
+        )
+    ) }
     var password by rememberSaveable(
         stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(NO_VALUE)) }
+    ) { mutableStateOf(
+        value = TextFieldValue(
+            text = EMPTY_STRING
+        )
+    ) }
     val keyboard = LocalSoftwareKeyboardController.current
 
     Column(
@@ -70,7 +78,7 @@ fun SignInContent(
             }
         ) {
             Text(
-                text = SIGN_IN,
+                text = SIGN_IN_BUTTON,
                 fontSize = 15.sp
             )
         }

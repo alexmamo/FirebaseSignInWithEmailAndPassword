@@ -5,11 +5,13 @@ object Constants {
     const val TAG = "AppTag"
 
     //Buttons
-    const val SIGN_IN = "Sign in"
-    const val RESET_PASSWORD = "Reset"
-    const val SIGN_UP = "Sign up"
-    const val SIGN_OUT = "Sign out"
-    const val REVOKE_ACCESS = "Revoke Access"
+    const val SIGN_IN_BUTTON = "Sign in"
+    const val RESET_PASSWORD_BUTTON = "Reset"
+    const val SIGN_UP_BUTTON = "Sign up"
+
+    //Menu Items
+    const val SIGN_OUT_ITEM = "Sign out"
+    const val REVOKE_ACCESS_ITEM = "Revoke Access"
 
     //Screens
     const val SIGN_IN_SCREEN = "Sign in"
@@ -23,7 +25,7 @@ object Constants {
     const val PASSWORD_LABEL = "Password"
 
     //Useful
-    const val NO_VALUE = ""
+    const val EMPTY_STRING = ""
     const val VERTICAL_DIVIDER = "|"
 
     //Texts

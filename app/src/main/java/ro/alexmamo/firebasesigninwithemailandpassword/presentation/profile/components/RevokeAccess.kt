@@ -12,7 +12,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.components.ProgressBar
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.ACCESS_REVOKED_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.REVOKE_ACCESS_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SENSITIVE_OPERATION_MESSAGE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT_ITEM
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Utils.Companion.print
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Utils.Companion.showMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.*
@@ -30,7 +30,7 @@ fun RevokeAccess(
     fun showRevokeAccessMessage() = coroutineScope.launch {
         val result = scaffoldState.snackbarHostState.showSnackbar(
             message = REVOKE_ACCESS_MESSAGE,
-            actionLabel = SIGN_OUT
+            actionLabel = SIGN_OUT_ITEM
         )
         if (result == SnackbarResult.ActionPerformed) {
             signOut()
