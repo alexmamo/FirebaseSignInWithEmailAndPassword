@@ -23,12 +23,15 @@ fun ForgotPasswordContent(
     sendPasswordResetEmail: (email: String) -> Unit,
 ) {
     var email by rememberSaveable(
-        stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(
-        value = TextFieldValue(
-            text = EMPTY_STRING
-        )
-    ) }
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = EMPTY_STRING
+                )
+            )
+        }
+    )
 
     Column(
         modifier = Modifier

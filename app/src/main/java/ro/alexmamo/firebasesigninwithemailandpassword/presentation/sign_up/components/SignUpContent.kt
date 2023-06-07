@@ -30,19 +30,25 @@ fun SignUpContent(
     navigateBack: () -> Unit
 ) {
     var email by rememberSaveable(
-        stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(
-        value = TextFieldValue(
-            text = EMPTY_STRING
-        )
-    ) }
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = EMPTY_STRING
+                )
+            )
+        }
+    )
     var password by rememberSaveable(
-        stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(
-        value = TextFieldValue(
-            text = EMPTY_STRING
-        )
-    ) }
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = EMPTY_STRING
+                )
+            )
+        }
+    )
     val keyboard = LocalSoftwareKeyboardController.current
 
     Column(
