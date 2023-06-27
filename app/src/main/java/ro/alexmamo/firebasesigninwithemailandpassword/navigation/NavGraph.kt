@@ -1,14 +1,15 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ForgotPasswordScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ProfileScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignInScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignUpScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.VerifyEmailScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.ForgotPasswordScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.ProfileScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.SignInScreen
@@ -16,16 +17,13 @@ import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.SignU
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.verify_email.VerifyEmailScreen
 
 @Composable
-@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 fun NavGraph(
     navController: NavHostController
 ) {
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
-        startDestination = SignInScreen.route,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None }
+        startDestination = SignInScreen.route
     ) {
         composable(
             route = SignInScreen.route

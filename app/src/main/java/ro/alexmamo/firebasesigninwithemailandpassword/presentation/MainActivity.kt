@@ -4,18 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.NavGraph
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.*
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ProfileScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignInScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.VerifyEmailScreen
 
 @AndroidEntryPoint
-@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            navController = rememberAnimatedNavController()
+            navController = rememberNavController()
             NavGraph(
                 navController = navController
             )
