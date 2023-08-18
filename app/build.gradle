@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace 'ro.alexmamo.firebasesigninwithemailandpassword'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "ro.alexmamo.firebasesigninwithemailandpassword"
-        minSdk 21
-        targetSdk 33
+        minSdk 26
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
