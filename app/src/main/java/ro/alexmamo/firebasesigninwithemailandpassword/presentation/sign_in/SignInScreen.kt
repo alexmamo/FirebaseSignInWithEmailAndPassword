@@ -14,18 +14,18 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.toastError
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ForgotPasswordScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ProfileScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignUpScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.ForgotPassword
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Profile
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignUp
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInTopBar
 
 @Composable
 fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
-    navigateTo: (screen: Screen) -> Unit,
-    navigateToAndClear: (screen: Screen) -> Unit
+    navigate: (Route) -> Unit,
+    navigateAndClear: (Route) -> Unit
 ) {
     val context = LocalContext.current
     var signingIn by remember { mutableStateOf(false) }
@@ -43,10 +43,10 @@ fun SignInScreen(
                 },
                 signingIn = signingIn,
                 navigateToForgotPasswordScreen = {
-                    navigateTo(ForgotPasswordScreen)
+                    navigate(ForgotPassword)
                 },
                 navigateToSignUpScreen = {
-                    navigateTo(SignUpScreen)
+                    navigate(SignUp)
                 }
             )
         }
@@ -57,7 +57,7 @@ fun SignInScreen(
             is Loading -> ProgressBar()
             is Success -> signInResponse.data.let { isSignedIn ->
                 if (isSignedIn) {
-                    navigateToAndClear(ProfileScreen)
+                    navigateAndClear(Profile)
                     signingIn = false
                 }
             }

@@ -11,7 +11,7 @@ object Constants {
 
     //Menu Items
     const val SIGN_OUT_ITEM = "Sign out"
-    const val REVOKE_ACCESS_ITEM = "Revoke Access"
+    const val DELETE_USER_ITEM = "Delete user"
 
     //Screens
     const val SIGN_IN_SCREEN = "Sign in"
@@ -40,8 +40,8 @@ object Constants {
     const val EMAIL_VERIFICATION_SENT_MESSAGE = "We've sent you an email with a link to verify the email."
     const val EMAIL_NOT_VERIFIED_MESSAGE = "Your email is not verified."
     const val RESET_PASSWORD_MESSAGE = "We've sent you an email with a link to reset the password."
-    const val REVOKE_ACCESS_MESSAGE = "You need to re-authenticate before revoking the access."
-    const val ACCESS_REVOKED_MESSAGE = "Your access has been revoked."
+    const val DELETE_USER_MESSAGE = "You need to re-authenticate before deleting the user."
+    const val USER_DELETED_MESSAGE = "The user has been deleted."
 
     //Error Messages
     const val SENSITIVE_OPERATION_MESSAGE = "This operation is sensitive and requires recent authentication. Log in again before retrying this request."

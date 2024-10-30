@@ -58,7 +58,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun signOut() = auth.signOut()
 
-    override suspend fun revokeAccess() = try {
+    override suspend fun deleteUser() = try {
         auth.currentUser?.delete()?.await()
         Success(true)
     } catch (e: Exception) {

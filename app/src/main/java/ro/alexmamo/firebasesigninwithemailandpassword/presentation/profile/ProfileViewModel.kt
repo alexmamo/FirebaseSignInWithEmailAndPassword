@@ -11,14 +11,14 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Load
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.ReloadUserResponse
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.RevokeAccessResponse
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.DeleteUserResponse
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
-    var revokeAccessResponse by mutableStateOf<RevokeAccessResponse>(Success(false))
+    var deleteUserResponse by mutableStateOf<DeleteUserResponse>(Success(false))
         private set
     var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Success(false))
         private set
@@ -40,8 +40,8 @@ class ProfileViewModel @Inject constructor(
 
     fun signOut() = repo.signOut()
 
-    fun revokeAccess() = viewModelScope.launch {
-        revokeAccessResponse = Loading
-        revokeAccessResponse = repo.revokeAccess()
+    fun deleteUser() = viewModelScope.launch {
+        deleteUserResponse = Loading
+        deleteUserResponse = repo.deleteUser()
     }
 }

@@ -9,7 +9,7 @@ typealias SendEmailVerificationResponse = Response<Boolean>
 typealias SignInResponse = Response<Boolean>
 typealias ReloadUserResponse = Response<Boolean>
 typealias SendPasswordResetEmailResponse = Response<Boolean>
-typealias RevokeAccessResponse = Response<Boolean>
+typealias DeleteUserResponse = Response<Boolean>
 typealias AuthStateResponse = Flow<Boolean>
 
 interface AuthRepository {
@@ -27,7 +27,7 @@ interface AuthRepository {
 
     fun signOut()
 
-    suspend fun revokeAccess(): RevokeAccessResponse
+    suspend fun deleteUser(): DeleteUserResponse
 
     fun getAuthState(): AuthStateResponse
 }

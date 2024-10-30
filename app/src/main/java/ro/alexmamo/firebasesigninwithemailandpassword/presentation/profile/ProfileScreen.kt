@@ -15,10 +15,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ro.alexmamo.firebasesigninwithemailandpassword.components.ProgressBar
 import ro.alexmamo.firebasesigninwithemailandpassword.components.TopBar
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.ACCESS_REVOKED_MESSAGE
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.USER_DELETED_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMAIL_NOT_VERIFIED_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.PROFILE_SCREEN
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.REVOKE_ACCESS_MESSAGE
+import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.DELETE_USER_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SENSITIVE_OPERATION_MESSAGE
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT_ACTION_LABEL
 import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
@@ -27,27 +27,27 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.toastMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignInScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignIn
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.ProfileContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.VerifyEmailContent
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    navigateToAndClear: (screen: Screen) -> Unit,
+    navigateAndClear: (Route) -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     var isEmailVerified by remember { mutableStateOf(viewModel.isEmailVerified) }
     var reloadingUser by remember { mutableStateOf(false) }
-    var revokingAccess by remember { mutableStateOf(false) }
+    var deletingUser by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.getAuthState(
             navigateToSignInScreen = {
-                navigateToAndClear(SignInScreen)
+                navigateAndClear(SignIn)
             }
         )
     }
@@ -59,9 +59,9 @@ fun ProfileScreen(
                 signOut = {
                     viewModel.signOut()
                 },
-                revokeAccess = {
-                    viewModel.revokeAccess()
-                    revokingAccess = true
+                deleteUser = {
+                    viewModel.deleteUser()
+                    deletingUser = true
                 }
             )
         },
@@ -104,9 +104,9 @@ fun ProfileScreen(
         }
     }
 
-    fun showRevokeAccessMessage() = coroutineScope.launch {
+    fun showDeleteUserMessage() = coroutineScope.launch {
         val result = scaffoldState.snackbarHostState.showSnackbar(
-            message = REVOKE_ACCESS_MESSAGE,
+            message = DELETE_USER_MESSAGE,
             actionLabel = SIGN_OUT_ACTION_LABEL
         )
         if (result == SnackbarResult.ActionPerformed) {
@@ -114,21 +114,21 @@ fun ProfileScreen(
         }
     }
 
-    if (revokingAccess) {
-        when(val revokeAccessResponse = viewModel.revokeAccessResponse) {
+    if (deletingUser) {
+        when(val deleteUserResponse = viewModel.deleteUserResponse) {
             is Loading -> ProgressBar()
-            is Success -> revokeAccessResponse.data.let { isAccessRevoked ->
-                if (isAccessRevoked) {
-                    toastMessage(context, ACCESS_REVOKED_MESSAGE)
+            is Success -> deleteUserResponse.data.let { isUserDeleted ->
+                if (isUserDeleted) {
+                    toastMessage(context, USER_DELETED_MESSAGE)
                 }
-                revokingAccess = false
+                deletingUser = false
             }
-            is Failure -> revokeAccessResponse.e.let { e ->
+            is Failure -> deleteUserResponse.e.let { e ->
                 printError(e)
                 if (e.message == SENSITIVE_OPERATION_MESSAGE) {
-                    showRevokeAccessMessage()
+                    showDeleteUserMessage()
                 }
-                revokingAccess = false
+                deletingUser = false
             }
         }
     }

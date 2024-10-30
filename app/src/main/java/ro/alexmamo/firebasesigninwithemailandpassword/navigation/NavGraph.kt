@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ForgotPasswordScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ProfileScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignInScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignUpScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SplashScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.ForgotPassword
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Profile
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignIn
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignUp
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Splash
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.ForgotPasswordScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.ProfileScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.SignInScreen
@@ -21,57 +21,41 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = SplashScreen
+        startDestination = Splash
     ) {
-        composable<SplashScreen>  {
+        composable<Splash>  {
             SplashScreen(
-                navigateToAndClear = { screen ->
-                    navController.navigateToAndClear(screen)
-                }
+                navigateAndClear = navController::navigateAndClear
             )
         }
-        composable<SignInScreen>  {
+        composable<SignIn>  {
             SignInScreen(
-                navigateTo = { screen ->
-                    navController.navigateTo(screen)
-                },
-                navigateToAndClear = { screen ->
-                    navController.navigateToAndClear(screen)
-                }
+                navigate = navController::navigate,
+                navigateAndClear = navController::navigateAndClear
             )
         }
-        composable<ForgotPasswordScreen> {
+        composable<ForgotPassword> {
             ForgotPasswordScreen(
-                navigateBack = {
-                    navController.navigateUp()
-                }
+                navigateBack = navController::navigateUp
             )
         }
-        composable<SignUpScreen> {
+        composable<SignUp> {
             SignUpScreen(
-                navigateBack = {
-                    navController.navigateUp()
-                },
-                navigateToAndClear = { screen ->
-                    navController.navigateToAndClear(screen)
-                }
+                navigateBack = navController::navigateUp,
+                navigateAndClear = navController::navigateAndClear
             )
         }
-        composable<ProfileScreen> {
+        composable<Profile> {
             ProfileScreen(
-                navigateToAndClear = { screen ->
-                    navController.navigateToAndClear(screen)
-                }
+                navigateAndClear = navController::navigateAndClear
             )
         }
     }
 }
 
-fun NavHostController.navigateTo(screen: Screen) = navigate(screen)
-
-fun NavHostController.navigateToAndClear(screen: Screen) = navigate(screen) {
+fun NavHostController.navigateAndClear(route: Route) = navigate(route) {
     popUpTo(graph.startDestinationId) {
         inclusive = true
     }
-    graph.setStartDestination(screen)
+    graph.setStartDestination(route)
 }

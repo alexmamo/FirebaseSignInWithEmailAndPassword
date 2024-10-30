@@ -16,8 +16,8 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.toastMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ProfileScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Profile
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.components.SignUpContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.components.SignUpTopBar
 
@@ -25,7 +25,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.compo
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
-    navigateToAndClear: (screen: Screen) -> Unit
+    navigateAndClear: (Route) -> Unit
 ) {
     val context = LocalContext.current
     var signingUp by remember { mutableStateOf(false) }
@@ -75,7 +75,7 @@ fun SignUpScreen(
             is Success -> sendEmailVerificationResponse.data.let { isVerificationEmailSent ->
                 if (isVerificationEmailSent) {
                     toastMessage(context, EMAIL_VERIFICATION_SENT_MESSAGE)
-                    navigateToAndClear(ProfileScreen)
+                    navigateAndClear(Profile)
                     sendingEmailVerification = false
                 }
             }
