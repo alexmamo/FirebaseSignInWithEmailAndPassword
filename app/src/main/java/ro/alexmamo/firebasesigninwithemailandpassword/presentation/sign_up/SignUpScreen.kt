@@ -45,8 +45,8 @@ fun SignUpScreen(
                     signingUp = true
                 },
                 signingUp = signingUp,
-                sendingEmailVerification = sendingEmailVerification,
-                navigateBack = navigateBack
+                navigateBack = navigateBack,
+                sendingEmailVerification = sendingEmailVerification
             )
         }
     )

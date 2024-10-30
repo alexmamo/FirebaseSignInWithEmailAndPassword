@@ -26,8 +26,8 @@ fun SignUpContent(
     padding: PaddingValues,
     signUp: (email: String, password: String) -> Unit,
     signingUp: Boolean,
-    sendingEmailVerification: Boolean,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    sendingEmailVerification: Boolean
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver
