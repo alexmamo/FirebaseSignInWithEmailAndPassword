@@ -3,7 +3,7 @@ package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.comp
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import ro.alexmamo.firebasesigninwithemailandpassword.components.BackIcon
+import ro.alexmamo.firebasesigninwithemailandpassword.components.ArrowBackIcon
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_UP_SCREEN
 
 @Composable
@@ -17,8 +17,8 @@ fun SignUpTopBar(
             )
         },
         navigationIcon = {
-            BackIcon(
-                navigateBack = navigateBack
+            ArrowBackIcon(
+                onArrowBackIconClick = navigateBack
             )
         }
     )

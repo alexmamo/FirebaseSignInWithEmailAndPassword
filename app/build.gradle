@@ -1,57 +1,57 @@
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "kotlin-kapt"
-    id "com.google.gms.google-services"
-    id "dagger.hilt.android.plugin"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace 'ro.alexmamo.firebasesigninwithemailandpassword'
-    compileSdk 34
+    namespace = "ro.alexmamo.firebasesigninwithemailandpassword"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "ro.alexmamo.firebasesigninwithemailandpassword"
-        minSdk 26
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        applicationId = "ro.alexmamo.firebasesigninwithemailandpassword"
+        minSdk = 26
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
+        jvmTarget = JavaVersion.VERSION_19.toString()
     }
     buildFeatures {
-        compose true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
 }
 
 dependencies {
     //Compose
-    implementation platform("androidx.compose:compose-bom:$compose_bom_version")
-    implementation "androidx.compose.material:material"
-    implementation "androidx.compose.material:material-icons-extended"
-    //Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.material)
+    implementation(libs.compose.material.icons)
+    //Navigation
+    implementation(libs.navigation.compose)
     //Hilt Navigation Compose
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version"
+    implementation(libs.hilt.navigation.compose)
+    //Hilt
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
     //Firebase
-    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
-    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    //Serialization
+    implementation(libs.serialization)
 }

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
-import ro.alexmamo.firebasesigninwithemailandpassword.components.SmallSpacer
+import ro.alexmamo.firebasesigninwithemailandpassword.components.VerticalSpacer
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMPTY_STRING
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.RESET_PASSWORD_BUTTON
 
@@ -21,17 +21,11 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.RESET_PASSW
 fun ForgotPasswordContent(
     padding: PaddingValues,
     sendPasswordResetEmail: (email: String) -> Unit,
+    sendingPasswordResetEmail: Boolean
 ) {
-    var email by rememberSaveable(
-        stateSaver = TextFieldValue.Saver,
-        init = {
-            mutableStateOf(
-                value = TextFieldValue(
-                    text = EMPTY_STRING
-                )
-            )
-        }
-    )
+    var email by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf( TextFieldValue(EMPTY_STRING))
+    }
 
     Column(
         modifier = Modifier
@@ -46,11 +40,12 @@ fun ForgotPasswordContent(
                 email = newValue
             }
         )
-        SmallSpacer()
+        VerticalSpacer()
         Button(
             onClick = {
                 sendPasswordResetEmail(email.text)
-            }
+            },
+            enabled = !sendingPasswordResetEmail
         ) {
             Text(
                 text = RESET_PASSWORD_BUTTON,

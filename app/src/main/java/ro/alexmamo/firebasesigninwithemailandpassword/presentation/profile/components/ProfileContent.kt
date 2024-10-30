@@ -17,7 +17,9 @@ fun ProfileContent(
     padding: PaddingValues
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(padding).padding(top = 48.dp),
+        modifier = Modifier.fillMaxSize().padding(padding).padding(
+            top = 48.dp
+        ),
         contentAlignment = Alignment.TopCenter
     ) {
         Text(

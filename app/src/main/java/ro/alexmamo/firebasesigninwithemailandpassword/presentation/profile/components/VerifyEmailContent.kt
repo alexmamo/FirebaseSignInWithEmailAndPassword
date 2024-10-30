@@ -1,4 +1,4 @@
-package ro.alexmamo.firebasesigninwithemailandpassword.presentation.verify_email.components
+package ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ro.alexmamo.firebasesigninwithemailandpassword.components.SmallSpacer
+import ro.alexmamo.firebasesigninwithemailandpassword.components.VerticalSpacer
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.ALREADY_VERIFIED
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SPAM_EMAIL
 
@@ -19,7 +19,10 @@ fun VerifyEmailContent(
     reloadUser: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding).padding(start = 32.dp, end = 32.dp),
+        modifier = Modifier.fillMaxSize().padding(padding).padding(
+            start = 32.dp,
+            end = 32.dp
+        ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -31,7 +34,7 @@ fun VerifyEmailContent(
             fontSize = 16.sp,
             textDecoration = TextDecoration.Underline
         )
-        SmallSpacer()
+        VerticalSpacer()
         Text(
             text = SPAM_EMAIL,
             fontSize = 15.sp

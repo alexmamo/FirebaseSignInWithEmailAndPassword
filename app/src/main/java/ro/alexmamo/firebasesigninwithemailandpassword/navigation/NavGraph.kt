@@ -1,7 +1,6 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,69 +8,70 @@ import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ForgotPa
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.ProfileScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignInScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SignUpScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.VerifyEmailScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Screen.SplashScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.ForgotPasswordScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.ProfileScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.SignInScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.SignUpScreen
-import ro.alexmamo.firebasesigninwithemailandpassword.presentation.verify_email.VerifyEmailScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.presentation.splash.SplashScreen
 
 @Composable
-@ExperimentalComposeUiApi
 fun NavGraph(
     navController: NavHostController
 ) {
     NavHost(
         navController = navController,
-        startDestination = SignInScreen.route
+        startDestination = SplashScreen
     ) {
-        composable(
-            route = SignInScreen.route
-        ) {
-            SignInScreen(
-                navigateToForgotPasswordScreen = {
-                    navController.navigate(ForgotPasswordScreen.route)
-                },
-                navigateToSignUpScreen = {
-                    navController.navigate(SignUpScreen.route)
+        composable<SplashScreen>  {
+            SplashScreen(
+                navigateToAndClear = { screen ->
+                    navController.navigateToAndClear(screen)
                 }
             )
         }
-        composable(
-            route = ForgotPasswordScreen.route
-        ) {
+        composable<SignInScreen>  {
+            SignInScreen(
+                navigateTo = { screen ->
+                    navController.navigateTo(screen)
+                },
+                navigateToAndClear = { screen ->
+                    navController.navigateToAndClear(screen)
+                }
+            )
+        }
+        composable<ForgotPasswordScreen> {
             ForgotPasswordScreen(
                 navigateBack = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             )
         }
-        composable(
-            route = SignUpScreen.route
-        ) {
+        composable<SignUpScreen> {
             SignUpScreen(
                 navigateBack = {
-                    navController.popBackStack()
+                    navController.navigateUp()
+                },
+                navigateToAndClear = { screen ->
+                    navController.navigateToAndClear(screen)
                 }
             )
         }
-        composable(
-            route = VerifyEmailScreen.route
-        ) {
-            VerifyEmailScreen(
-                navigateToProfileScreen = {
-                    navController.navigate(ProfileScreen.route) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
-                        }
-                    }
+        composable<ProfileScreen> {
+            ProfileScreen(
+                navigateToAndClear = { screen ->
+                    navController.navigateToAndClear(screen)
                 }
             )
-        }
-        composable(
-            route = ProfileScreen.route
-        ) {
-            ProfileScreen()
         }
     }
+}
+
+fun NavHostController.navigateTo(screen: Screen) = navigate(screen)
+
+fun NavHostController.navigateToAndClear(screen: Screen) = navigate(screen) {
+    popUpTo(graph.startDestinationId) {
+        inclusive = true
+    }
+    graph.setStartDestination(screen)
 }

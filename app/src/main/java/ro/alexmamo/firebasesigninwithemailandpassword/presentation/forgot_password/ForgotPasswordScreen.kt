@@ -2,11 +2,20 @@ package ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_passw
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import ro.alexmamo.firebasesigninwithemailandpassword.components.ProgressBar
 import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.RESET_PASSWORD_MESSAGE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Utils.Companion.showMessage
-import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.components.ForgotPassword
+import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
+import ro.alexmamo.firebasesigninwithemailandpassword.core.toastError
+import ro.alexmamo.firebasesigninwithemailandpassword.core.toastMessage
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.components.ForgotPasswordContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.components.ForgotPasswordTopBar
 
@@ -16,6 +25,7 @@ fun ForgotPasswordScreen(
     navigateBack: () -> Unit
 ) {
     val context = LocalContext.current
+    var sendingPasswordResetEmail by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -28,18 +38,28 @@ fun ForgotPasswordScreen(
                 padding = padding,
                 sendPasswordResetEmail = { email ->
                     viewModel.sendPasswordResetEmail(email)
-                }
+                    sendingPasswordResetEmail = true
+                },
+                sendingPasswordResetEmail = sendingPasswordResetEmail
             )
         }
     )
 
-    ForgotPassword(
-        navigateBack = navigateBack,
-        showResetPasswordMessage = {
-            showMessage(context, RESET_PASSWORD_MESSAGE)
-        },
-        showErrorMessage = { errorMessage ->
-            showMessage(context, errorMessage)
+    if (sendingPasswordResetEmail) {
+        when(val sendPasswordResetEmailResponse = viewModel.sendPasswordResetEmailResponse) {
+            is Loading -> ProgressBar()
+            is Success -> sendPasswordResetEmailResponse.data.let { isPasswordResetEmailSent ->
+                if (isPasswordResetEmailSent) {
+                    toastMessage(context, RESET_PASSWORD_MESSAGE)
+                    navigateBack()
+                }
+                sendingPasswordResetEmail = false
+            }
+            is Failure -> sendPasswordResetEmailResponse.e.let { e ->
+                printError(e)
+                toastError(context, e)
+                sendingPasswordResetEmail = false
+            }
         }
-    )
+    }
 }

@@ -23,12 +23,20 @@ class ProfileViewModel @Inject constructor(
     var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Success(false))
         private set
 
-    fun reloadUser() = viewModelScope.launch {
-        reloadUserResponse = Loading
-        reloadUserResponse = repo.reloadFirebaseUser()
+    fun getAuthState(navigateToSignInScreen: () -> Unit) = viewModelScope.launch {
+        repo.getAuthState().collect { isUserSignedOut ->
+            if (isUserSignedOut) {
+                navigateToSignInScreen()
+            }
+        }
     }
 
-    val isEmailVerified get() = repo.currentUser?.isEmailVerified ?: false
+    fun reloadUser() = viewModelScope.launch {
+        reloadUserResponse = Loading
+        reloadUserResponse = repo.reloadUser()
+    }
+
+    val isEmailVerified get() = repo.currentUser?.isEmailVerified == true
 
     fun signOut() = repo.signOut()
 

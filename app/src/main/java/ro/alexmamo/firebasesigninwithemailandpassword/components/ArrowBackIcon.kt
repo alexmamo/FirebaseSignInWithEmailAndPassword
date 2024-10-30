@@ -3,18 +3,18 @@ package ro.alexmamo.firebasesigninwithemailandpassword.components
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 
 @Composable
-fun BackIcon(
-    navigateBack: () -> Unit
+fun ArrowBackIcon(
+    onArrowBackIconClick: () -> Unit
 ) {
     IconButton(
-        onClick = navigateBack
+        onClick = onArrowBackIconClick
     ) {
         Icon(
-            imageVector = Icons.Outlined.ArrowBack,
+            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
             contentDescription = null,
         )
     }
