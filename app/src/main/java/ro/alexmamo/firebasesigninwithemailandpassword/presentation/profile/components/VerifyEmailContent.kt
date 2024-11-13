@@ -6,20 +6,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ro.alexmamo.firebasesigninwithemailandpassword.components.VerticalSpacer
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.ALREADY_VERIFIED
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SPAM_EMAIL
+import ro.alexmamo.firebasesigninwithemailandpassword.R
 
 @Composable
 fun VerifyEmailContent(
-    padding: PaddingValues,
+    innerPadding: PaddingValues,
     reloadUser: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding).padding(
+        modifier = Modifier.fillMaxSize().padding(innerPadding).padding(
             start = 32.dp,
             end = 32.dp
         ),
@@ -30,13 +29,19 @@ fun VerifyEmailContent(
             modifier = Modifier.clickable {
                 reloadUser()
             },
-            text = ALREADY_VERIFIED,
-            fontSize = 16.sp,
+            text = stringResource(
+                id = R.string.already_verified
+            ),
+            fontSize = 17.sp,
             textDecoration = TextDecoration.Underline
         )
-        VerticalSpacer()
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
         Text(
-            text = SPAM_EMAIL,
+            text = stringResource(
+                id = R.string.spam_email
+            ),
             fontSize = 15.sp
         )
     }

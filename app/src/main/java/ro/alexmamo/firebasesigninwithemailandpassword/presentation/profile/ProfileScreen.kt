@@ -13,17 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
-import ro.alexmamo.firebasesigninwithemailandpassword.components.ProgressBar
-import ro.alexmamo.firebasesigninwithemailandpassword.components.TopBar
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.USER_DELETED_MESSAGE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMAIL_NOT_VERIFIED_MESSAGE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.PROFILE_SCREEN
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.DELETE_USER_MESSAGE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SENSITIVE_OPERATION_MESSAGE
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT_ACTION_LABEL
+import ro.alexmamo.firebasesigninwithemailandpassword.R
+import ro.alexmamo.firebasesigninwithemailandpassword.components.LoadingIndicator
+import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.ProfileTopBar
 import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.toastError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.toastMessage
+import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastError
+import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
@@ -31,6 +26,10 @@ import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignIn
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.ProfileContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.VerifyEmailContent
+
+const val SIGN_OUT_ACTION_LABEL = "Sign out?"
+const val DELETE_USER_MESSAGE = "You need to re-authenticate before deleting the user."
+const val SENSITIVE_OPERATION_MESSAGE = "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
 
 @Composable
 fun ProfileScreen(
@@ -54,8 +53,7 @@ fun ProfileScreen(
 
     Scaffold(
         topBar = {
-            TopBar(
-                title = PROFILE_SCREEN,
+            ProfileTopBar(
                 signOut = {
                     viewModel.signOut()
                 },
@@ -65,40 +63,37 @@ fun ProfileScreen(
                 }
             )
         },
-        content = { padding ->
-            if (isEmailVerified) {
-                ProfileContent(
-                    padding = padding
-                )
-            } else {
-                VerifyEmailContent(
-                    padding = padding,
-                    reloadUser = {
-                        viewModel.reloadUser()
-                        reloadingUser = true
-                    }
-                )
-            }
-        },
         scaffoldState = scaffoldState
-    )
+    ) { innerPadding ->
+        if (isEmailVerified) {
+            ProfileContent(
+                innerPadding = innerPadding
+            )
+        } else {
+            VerifyEmailContent(
+                innerPadding = innerPadding,
+                reloadUser = {
+                    viewModel.reloadUser()
+                    reloadingUser = true
+                }
+            )
+        }
+    }
 
     if (reloadingUser) {
         when(val reloadUserResponse = viewModel.reloadUserResponse) {
-            is Loading -> ProgressBar()
-            is Success -> reloadUserResponse.data.let { isUserReloaded ->
-                if (isUserReloaded) {
-                    if (viewModel.isEmailVerified) {
-                        isEmailVerified = true
-                    } else {
-                        toastMessage(context, EMAIL_NOT_VERIFIED_MESSAGE)
-                    }
-                    reloadingUser = false
+            is Loading -> LoadingIndicator()
+            is Success -> {
+                if (viewModel.isEmailVerified) {
+                    isEmailVerified = true
+                } else {
+                    showToastMessage(context, R.string.email_not_verified_message)
                 }
+                reloadingUser = false
             }
             is Failure -> reloadUserResponse.e.let { e ->
                 printError(e)
-                toastError(context, e)
+                showToastError(context, e)
                 reloadingUser = false
             }
         }
@@ -116,11 +111,9 @@ fun ProfileScreen(
 
     if (deletingUser) {
         when(val deleteUserResponse = viewModel.deleteUserResponse) {
-            is Loading -> ProgressBar()
-            is Success -> deleteUserResponse.data.let { isUserDeleted ->
-                if (isUserDeleted) {
-                    toastMessage(context, USER_DELETED_MESSAGE)
-                }
+            is Loading -> LoadingIndicator()
+            is Success -> {
+                showToastMessage(context, R.string.user_deleted_message)
                 deletingUser = false
             }
             is Failure -> deleteUserResponse.e.let { e ->

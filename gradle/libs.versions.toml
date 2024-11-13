@@ -1,6 +1,6 @@
 [versions]
 #Android
-gradle = "8.7.1"
+gradle = "8.7.2"
 #Kotlin
 kotlin = "2.0.21"
 #Ksp
@@ -10,7 +10,7 @@ googleServices = "4.4.2"
 #Hilt
 hiltAndroid = "2.52"
 #Libraries
-composeBom = "2024.10.00"
+composeBom = "2024.10.01"
 compose = "1.5.15"
 navigationCompose = "2.8.3"
 hiltNavigationCompose = "1.2.0"

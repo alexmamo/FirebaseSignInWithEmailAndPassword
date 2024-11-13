@@ -1,8 +1,6 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,22 +14,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ro.alexmamo.firebasesigninwithemailandpassword.R
+import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionButton
+import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionText
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.PasswordField
-import ro.alexmamo.firebasesigninwithemailandpassword.components.VerticalSpacer
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMPTY_STRING
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.FORGOT_PASSWORD
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.NO_ACCOUNT
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_IN_BUTTON
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.VERTICAL_DIVIDER
+import ro.alexmamo.firebasesigninwithemailandpassword.core.EMPTY_STRING
+
+const val VERTICAL_DIVIDER = "|"
 
 @Composable
 fun SignInContent(
-    padding: PaddingValues,
-    signIn: (email: String, password: String) -> Unit,
+    innerPadding: PaddingValues,
+    onSigningIn: (String, String) -> Unit,
     signingIn: Boolean,
-    navigateToForgotPasswordScreen: () -> Unit,
-    navigateToSignUpScreen: () -> Unit
+    onForgotPasswordTextClick: () -> Unit,
+    onSignUpTextClick: () -> Unit
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver
@@ -42,7 +40,7 @@ fun SignInContent(
     val keyboard = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding),
+        modifier = Modifier.fillMaxSize().padding(innerPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -52,33 +50,30 @@ fun SignInContent(
                 email = newEmail
             }
         )
-        VerticalSpacer()
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
         PasswordField(
             password = password,
             onPasswordValueChange = { newPassword ->
                 password = newPassword
             }
         )
-        VerticalSpacer()
-        Button(
-            onClick = {
-                signIn(email.text, password.text)
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+        ActionButton(
+            onActionButtonClick = {
+                onSigningIn(email.text, password.text)
                 keyboard?.hide()
             },
-            enabled = !signingIn
-        ) {
-            Text(
-                text = SIGN_IN_BUTTON,
-                fontSize = 15.sp
-            )
-        }
+            enabled = !signingIn,
+            resourceId = R.string.sign_in_button
+        )
         Row {
-            Text(
-                modifier = Modifier.clickable {
-                    navigateToForgotPasswordScreen()
-                },
-                text = FORGOT_PASSWORD,
-                fontSize = 15.sp
+            ActionText(
+                onActionTextClick = onForgotPasswordTextClick,
+                resourceId = R.string.forgot_password
             )
             Text(
                 modifier = Modifier.padding(
@@ -89,12 +84,9 @@ fun SignInContent(
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold
             )
-            Text(
-                modifier = Modifier.clickable {
-                    navigateToSignUpScreen()
-                },
-                text = NO_ACCOUNT,
-                fontSize = 15.sp
+            ActionText(
+                onActionTextClick = onSignUpTextClick,
+                resourceId = R.string.sign_up
             )
         }
     }

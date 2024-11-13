@@ -9,11 +9,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.PASSWORD_LABEL
+import ro.alexmamo.firebasesigninwithemailandpassword.R
 
 @Composable
 fun PasswordField(
@@ -29,7 +30,9 @@ fun PasswordField(
         },
         label = {
             Text(
-                text = PASSWORD_LABEL
+                text = stringResource(
+                    id = R.string.password_label
+                )
             )
         },
         singleLine = true,

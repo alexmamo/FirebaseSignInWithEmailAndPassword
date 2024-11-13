@@ -1,8 +1,6 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,26 +9,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
+import ro.alexmamo.firebasesigninwithemailandpassword.R
+import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionButton
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
-import ro.alexmamo.firebasesigninwithemailandpassword.components.VerticalSpacer
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMPTY_STRING
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.RESET_PASSWORD_BUTTON
+import ro.alexmamo.firebasesigninwithemailandpassword.core.EMPTY_STRING
 
 @Composable
 fun ForgotPasswordContent(
-    padding: PaddingValues,
-    sendPasswordResetEmail: (email: String) -> Unit,
+    innerPadding: PaddingValues,
+    onSendingPasswordResetEmail: (email: String) -> Unit,
     sendingPasswordResetEmail: Boolean
 ) {
-    var email by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+    var email by rememberSaveable(
+        stateSaver = TextFieldValue.Saver
+    ) {
         mutableStateOf( TextFieldValue(EMPTY_STRING))
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding),
+        modifier = Modifier.fillMaxSize().padding(innerPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -40,17 +38,15 @@ fun ForgotPasswordContent(
                 email = newValue
             }
         )
-        VerticalSpacer()
-        Button(
-            onClick = {
-                sendPasswordResetEmail(email.text)
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+        ActionButton(
+            onActionButtonClick = {
+                onSendingPasswordResetEmail(email.text)
             },
-            enabled = !sendingPasswordResetEmail
-        ) {
-            Text(
-                text = RESET_PASSWORD_BUTTON,
-                fontSize = 15.sp
-            )
-        }
+            enabled = !sendingPasswordResetEmail,
+            resourceId = R.string.reset_password_button
+        )
     }
 }

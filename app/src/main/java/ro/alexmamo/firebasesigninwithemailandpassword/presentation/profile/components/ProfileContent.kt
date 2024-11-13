@@ -8,22 +8,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.WELCOME_MESSAGE
+import ro.alexmamo.firebasesigninwithemailandpassword.R
 
 @Composable
 fun ProfileContent(
-    padding: PaddingValues
+    innerPadding: PaddingValues
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(padding).padding(
+        modifier = Modifier.fillMaxSize().padding(innerPadding).padding(
             top = 48.dp
         ),
         contentAlignment = Alignment.TopCenter
     ) {
         Text(
-            text = WELCOME_MESSAGE,
+            text = stringResource(
+                id = R.string.welcome_message
+            ),
             fontSize = 24.sp
         )
     }

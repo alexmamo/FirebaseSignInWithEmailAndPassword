@@ -8,9 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import ro.alexmamo.firebasesigninwithemailandpassword.components.ProgressBar
+import ro.alexmamo.firebasesigninwithemailandpassword.components.LoadingIndicator
 import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.toastError
+import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastError
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
@@ -33,37 +33,34 @@ fun SignInScreen(
     Scaffold(
         topBar = {
             SignInTopBar()
-        },
-        content = { padding ->
-            SignInContent(
-                padding = padding,
-                signIn = { email, password ->
-                    viewModel.signInWithEmailAndPassword(email, password)
-                    signingIn = true
-                },
-                signingIn = signingIn,
-                navigateToForgotPasswordScreen = {
-                    navigate(ForgotPassword)
-                },
-                navigateToSignUpScreen = {
-                    navigate(SignUp)
-                }
-            )
         }
-    )
+    ) { innerPadding ->
+        SignInContent(
+            innerPadding = innerPadding,
+            onSigningIn = { email, password ->
+                viewModel.signInWithEmailAndPassword(email, password)
+                signingIn = true
+            },
+            signingIn = signingIn,
+            onForgotPasswordTextClick = {
+                navigate(ForgotPassword)
+            },
+            onSignUpTextClick = {
+                navigate(SignUp)
+            }
+        )
+    }
 
     if (signingIn) {
         when(val signInResponse = viewModel.signInResponse) {
-            is Loading -> ProgressBar()
-            is Success -> signInResponse.data.let { isSignedIn ->
-                if (isSignedIn) {
-                    navigateAndClear(Profile)
-                    signingIn = false
-                }
+            is Loading -> LoadingIndicator()
+            is Success -> {
+                navigateAndClear(Profile)
+                signingIn = false
             }
             is Failure -> signInResponse.e.let{ e ->
                 printError(e)
-                toastError(context, e)
+                showToastError(context, e)
                 signingIn = false
             }
         }

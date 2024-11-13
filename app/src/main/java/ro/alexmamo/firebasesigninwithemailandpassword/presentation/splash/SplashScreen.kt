@@ -8,7 +8,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignIn
 
 @Composable
 fun SplashScreen(
-    viewModel: SplashScreenViewModel = hiltViewModel(),
+    viewModel: SplashViewModel = hiltViewModel(),
     navigateAndClear: (Route) -> Unit
 ) {
     if (viewModel.isUserSignedOut) {

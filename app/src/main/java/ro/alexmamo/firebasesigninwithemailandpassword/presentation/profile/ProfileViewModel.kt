@@ -7,20 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ro.alexmamo.firebasesigninwithemailandpassword.core.launchCatching
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.ReloadUserResponse
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.DeleteUserResponse
 import javax.inject.Inject
+
+typealias DeleteUserResponse = Response<Void>
+typealias ReloadUserResponse = Response<Void>
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
-    var deleteUserResponse by mutableStateOf<DeleteUserResponse>(Success(false))
+    var deleteUserResponse by mutableStateOf<DeleteUserResponse>(Loading)
         private set
-    var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Success(false))
+    var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Loading)
         private set
 
     fun getAuthState(navigateToSignInScreen: () -> Unit) = viewModelScope.launch {
@@ -31,17 +33,19 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun deleteUser() = viewModelScope.launch {
+        deleteUserResponse = launchCatching {
+            repo.deleteUser()
+        }
+    }
+
     fun reloadUser() = viewModelScope.launch {
-        reloadUserResponse = Loading
-        reloadUserResponse = repo.reloadUser()
+        reloadUserResponse = launchCatching {
+            repo.reloadUser()
+        }
     }
 
     val isEmailVerified get() = repo.currentUser?.isEmailVerified == true
 
     fun signOut() = repo.signOut()
-
-    fun deleteUser() = viewModelScope.launch {
-        deleteUserResponse = Loading
-        deleteUserResponse = repo.deleteUser()
-    }
 }

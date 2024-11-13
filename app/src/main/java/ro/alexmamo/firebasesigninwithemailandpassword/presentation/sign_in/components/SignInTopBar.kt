@@ -3,14 +3,17 @@ package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.comp
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_IN_SCREEN
+import androidx.compose.ui.res.stringResource
+import ro.alexmamo.firebasesigninwithemailandpassword.R
 
 @Composable
 fun SignInTopBar() {
     TopAppBar (
         title = {
             Text(
-                text = SIGN_IN_SCREEN
+                text = stringResource(
+                    id = R.string.sign_in_screen_title
+                )
             )
         }
     )

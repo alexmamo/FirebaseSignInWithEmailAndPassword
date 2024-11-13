@@ -8,11 +8,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import ro.alexmamo.firebasesigninwithemailandpassword.components.ProgressBar
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.EMAIL_VERIFICATION_SENT_MESSAGE
+import ro.alexmamo.firebasesigninwithemailandpassword.R
+import ro.alexmamo.firebasesigninwithemailandpassword.components.LoadingIndicator
 import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.toastError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.toastMessage
+import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastError
+import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
@@ -34,36 +34,33 @@ fun SignUpScreen(
     Scaffold(
         topBar = {
             SignUpTopBar(
-                navigateBack = navigateBack
-            )
-        },
-        content = { padding ->
-            SignUpContent(
-                padding = padding,
-                signUp = { email, password ->
-                    viewModel.signUpWithEmailAndPassword(email, password)
-                    signingUp = true
-                },
-                signingUp = signingUp,
-                navigateBack = navigateBack,
-                sendingEmailVerification = sendingEmailVerification
+                onArrowBackIconClick = navigateBack
             )
         }
-    )
+    ) { innerPadding ->
+        SignUpContent(
+            innerPadding = innerPadding,
+            onSigningUp = { email, password ->
+                viewModel.signUpWithEmailAndPassword(email, password)
+                signingUp = true
+            },
+            signingUp = signingUp,
+            sendingEmailVerification = sendingEmailVerification,
+            onSignInTextClick = navigateBack
+        )
+    }
 
     if (signingUp) {
         when(val signUpResponse = viewModel.signUpResponse) {
-            is Loading -> ProgressBar()
-            is Success -> signUpResponse.data.let { isSignedUp ->
-                if (isSignedUp) {
-                    viewModel.sendEmailVerification()
-                    signingUp = false
-                    sendingEmailVerification = true
-                }
+            is Loading -> LoadingIndicator()
+            is Success -> {
+                viewModel.sendEmailVerification()
+                signingUp = false
+                sendingEmailVerification = true
             }
             is Failure -> signUpResponse.e.let { e ->
                 printError(e)
-                toastError(context, e)
+                showToastError(context, e)
                 signingUp = false
             }
         }
@@ -71,17 +68,15 @@ fun SignUpScreen(
 
     if (sendingEmailVerification) {
         when(val sendEmailVerificationResponse = viewModel.sendEmailVerificationResponse) {
-            is Loading -> ProgressBar()
-            is Success -> sendEmailVerificationResponse.data.let { isVerificationEmailSent ->
-                if (isVerificationEmailSent) {
-                    toastMessage(context, EMAIL_VERIFICATION_SENT_MESSAGE)
-                    navigateAndClear(Profile)
-                    sendingEmailVerification = false
-                }
+            is Loading -> LoadingIndicator()
+            is Success -> {
+                showToastMessage(context, R.string.email_verification_sent_message)
+                navigateAndClear(Profile)
+                sendingEmailVerification = false
             }
             is Failure -> sendEmailVerificationResponse.e.let { e ->
                 printError(e)
-                toastError(context, e)
+                showToastError(context, e)
                 sendingEmailVerification = false
             }
         }

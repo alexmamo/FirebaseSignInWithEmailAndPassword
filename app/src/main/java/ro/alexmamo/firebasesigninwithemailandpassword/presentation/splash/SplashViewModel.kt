@@ -6,7 +6,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepo
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashScreenViewModel @Inject constructor(
+class SplashViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
     val isUserSignedOut get() = repo.currentUser == null

@@ -1,4 +1,4 @@
-package ro.alexmamo.firebasesigninwithemailandpassword.components
+package ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,12 +9,11 @@ import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.DELETE_USER_ITEM
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.SIGN_OUT_ITEM
+import androidx.compose.ui.res.stringResource
+import ro.alexmamo.firebasesigninwithemailandpassword.R
 
 @Composable
-fun TopBar(
-    title: String,
+fun ProfileTopBar(
     signOut: () -> Unit,
     deleteUser: () -> Unit
 ) {
@@ -27,7 +26,9 @@ fun TopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = title
+                    text = stringResource(
+                        id = R.string.profile_screen_title
+                    )
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -60,7 +61,9 @@ fun TopBar(
                     }
                 ) {
                     Text(
-                        text = SIGN_OUT_ITEM
+                        text = stringResource(
+                            id = R.string.sign_out_item
+                        )
                     )
                 }
                 DropdownMenuItem(
@@ -70,7 +73,9 @@ fun TopBar(
                     }
                 ) {
                     Text(
-                        text = DELETE_USER_ITEM
+                        text = stringResource(
+                            id = R.string.delete_user_item
+                        )
                     )
                 }
             }

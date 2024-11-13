@@ -7,20 +7,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ro.alexmamo.firebasesigninwithemailandpassword.core.launchCatching
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.SendPasswordResetEmailResponse
 import javax.inject.Inject
+
+typealias SendPasswordResetEmailResponse = Response<Void>
 
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
-    var sendPasswordResetEmailResponse by mutableStateOf<SendPasswordResetEmailResponse>(Success(false))
+    var sendPasswordResetEmailResponse by mutableStateOf<SendPasswordResetEmailResponse>(Loading)
 
     fun sendPasswordResetEmail(email: String) = viewModelScope.launch {
-        sendPasswordResetEmailResponse = Loading
-        sendPasswordResetEmailResponse = repo.sendPasswordResetEmail(email)
+        sendPasswordResetEmailResponse = launchCatching {
+            repo.sendPasswordResetEmail(email)
+        }
     }
 }

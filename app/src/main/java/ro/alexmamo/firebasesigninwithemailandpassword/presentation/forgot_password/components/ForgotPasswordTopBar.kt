@@ -2,23 +2,30 @@ package ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_passw
 
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.runtime.Composable
-import ro.alexmamo.firebasesigninwithemailandpassword.components.ArrowBackIcon
-import ro.alexmamo.firebasesigninwithemailandpassword.core.Constants.FORGOT_PASSWORD_SCREEN
+import androidx.compose.ui.res.stringResource
+import ro.alexmamo.firebasesigninwithemailandpassword.R
+import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionIconButton
 
 @Composable
 fun ForgotPasswordTopBar(
-    navigateBack: () -> Unit
+    onArrowBackIconClick: () -> Unit
 ) {
     TopAppBar (
         title = {
             Text(
-                text = FORGOT_PASSWORD_SCREEN
+                text = stringResource(
+                    id = R.string.forgot_password_screen_title
+                )
             )
         },
         navigationIcon = {
-            ArrowBackIcon(
-                onArrowBackIconClick = navigateBack
+            ActionIconButton(
+                onActionIconButtonClick = onArrowBackIconClick,
+                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                resourceId = R.string.navigate_back
             )
         }
     )

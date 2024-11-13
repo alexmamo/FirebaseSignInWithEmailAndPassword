@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">FirebaseSignInWithEmailAndPassword</string>
+    <!--Buttons-->
+    <string name="sign_in_button">Sign in</string>
+    <string name="reset_password_button">Reset</string>
+    <string name="sign_up_button">Sign up</string>
+    <!--Content Descriptions-->
+    <string name="navigate_back">Navigate back</string>
+    <!--Menu Items-->
+    <string name="sign_out_item">Sign out</string>
+    <string name="delete_user_item">Delete user</string>
+    <!--Screen Titles-->
+    <string name="sign_in_screen_title">Sign in</string>
+    <string name="forgot_password_screen_title">Forgot password</string>
+    <string name="sign_up_screen_title">Sign up</string>
+    <string name="profile_screen_title">Profile</string>
+    <!--Labels-->
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <!--Texts-->
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up">No account? Sign up.</string>
+    <string name="sign_in">Already a user? Sign in.</string>
+    <string name="welcome_message">Welcome to our app.</string>
+    <string name="already_verified">Already verified?</string>
+    <string name="spam_email">If not, please also check the spam folder.</string>
+    <!--Messages-->
+    <string name="email_verification_sent_message">We\'ve sent you an email with a link to verify the email.</string>
+    <string name="email_not_verified_message">Your email is not verified.</string>
+    <string name="reset_password_message">We\'ve sent you an email with a link to reset the password.</string>"
+    <string name="user_deleted_message">The user has been deleted.</string>
 </resources>
