@@ -1,35 +1,24 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.domain.repository
 
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-
-typealias AuthStateResponse = Flow<Boolean>
 
 interface AuthRepository {
     val currentUser: FirebaseUser?
 
-    suspend fun signUpWithEmailAndPassword(
-        email: String,
-        password: String
-    ): AuthResult?
+    suspend fun signUpWithEmailAndPassword(email: String, password: String)
 
-    suspend fun sendEmailVerification(): Void?
+    suspend fun sendEmailVerification()
 
-    suspend fun signInWithEmailAndPassword(
-        email: String,
-        password: String
-    ): AuthResult
+    suspend fun signInWithEmailAndPassword(email: String, password: String)
 
-    suspend fun deleteUser(): Void?
+    suspend fun deleteUser()
 
-    suspend fun reloadUser(): Void?
+    suspend fun reloadUser()
 
-    suspend fun sendPasswordResetEmail(
-        email: String
-    ): Void?
+    suspend fun sendPasswordResetEmail(email: String)
 
     fun signOut()
 
-    fun getAuthState(): AuthStateResponse
+    fun getAuthState(): Flow<Boolean>
 }

@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ro.alexmamo.firebasesigninwithemailandpassword.core.launchCatching
@@ -14,7 +13,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Load
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import javax.inject.Inject
 
-typealias SignInResponse = Response<AuthResult>
+typealias SignInResponse = Response<Unit>
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(

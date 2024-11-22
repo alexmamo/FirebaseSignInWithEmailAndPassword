@@ -15,25 +15,29 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override val currentUser get() = auth.currentUser
 
-    override suspend fun signUpWithEmailAndPassword(
-        email: String,
-        password: String
-    ) = auth.createUserWithEmailAndPassword(email, password).await()
+    override suspend fun signUpWithEmailAndPassword(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password).await()
+    }
 
-    override suspend fun sendEmailVerification() = currentUser?.sendEmailVerification()?.await()
+    override suspend fun sendEmailVerification() {
+        currentUser?.sendEmailVerification()?.await()
+    }
 
-    override suspend fun signInWithEmailAndPassword(
-        email: String,
-        password: String
-    ) = auth.signInWithEmailAndPassword(email, password).await()
+    override suspend fun signInWithEmailAndPassword(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password).await()
+    }
 
-    override suspend fun deleteUser() = currentUser?.delete()?.await()
+    override suspend fun deleteUser() {
+        currentUser?.delete()?.await()
+    }
 
-    override suspend fun reloadUser() = currentUser?.reload()?.await()
+    override suspend fun reloadUser() {
+        currentUser?.reload()?.await()
+    }
 
-    override suspend fun sendPasswordResetEmail(
-        email: String
-    ) = auth.sendPasswordResetEmail(email).await()
+    override suspend fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email).await()
+    }
 
     override fun signOut() = auth.signOut()
 

@@ -4,17 +4,17 @@ gradle = "8.7.2"
 #Kotlin
 kotlin = "2.0.21"
 #Ksp
-devtoolsKsp = "2.0.21-1.0.26"
+devtoolsKsp = "2.0.21-1.0.27"
 #Google
 googleServices = "4.4.2"
 #Hilt
 hiltAndroid = "2.52"
 #Libraries
-composeBom = "2024.10.01"
+composeBom = "2024.11.00"
 compose = "1.5.15"
-navigationCompose = "2.8.3"
+navigationCompose = "2.8.4"
 hiltNavigationCompose = "1.2.0"
-firebaseBom = "33.5.1"
+firebaseBom = "33.6.0"
 serialization = "1.7.3"
 
 [plugins]

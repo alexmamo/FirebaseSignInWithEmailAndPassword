@@ -13,7 +13,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Load
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import javax.inject.Inject
 
-typealias SendPasswordResetEmailResponse = Response<Void>
+typealias SendPasswordResetEmailResponse = Response<Unit>
 
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(

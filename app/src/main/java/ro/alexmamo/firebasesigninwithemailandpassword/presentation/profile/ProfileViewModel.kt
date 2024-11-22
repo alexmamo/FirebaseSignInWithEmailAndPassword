@@ -13,8 +13,8 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Load
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import javax.inject.Inject
 
-typealias DeleteUserResponse = Response<Void>
-typealias ReloadUserResponse = Response<Void>
+typealias DeleteUserResponse = Response<Unit>
+typealias ReloadUserResponse = Response<Unit>
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
