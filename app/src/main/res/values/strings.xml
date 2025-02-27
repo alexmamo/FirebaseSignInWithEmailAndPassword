@@ -13,10 +13,12 @@
     <string name="sign_in_screen_title">Sign in</string>
     <string name="forgot_password_screen_title">Forgot password</string>
     <string name="sign_up_screen_title">Sign up</string>
+    <string name="verify_email_screen_title">Verify email</string>
     <string name="profile_screen_title">Profile</string>
     <!--Labels-->
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
+    <string name="sign_out_action_label">Sign out?</string>
     <!--Texts-->
     <string name="forgot_password">Forgot password?</string>
     <string name="sign_up">No account? Sign up.</string>
@@ -24,9 +26,15 @@
     <string name="welcome_message">Welcome to our app.</string>
     <string name="already_verified">Already verified?</string>
     <string name="spam_email">If not, please also check the spam folder.</string>
+    <!--Keywords-->
+    <string name="sensitive_keyword">sensitive</string>
     <!--Messages-->
+    <string name="empty_email_message">Email cannot be empty.</string>
+    <string name="empty_password_message">Password cannot be empty.</string>
+    <string name="account_created_message">Your account has bee successfully created.</string>
     <string name="email_verification_sent_message">We\'ve sent you an email with a link to verify the email.</string>
-    <string name="email_not_verified_message">Your email is not verified.</string>
+    <string name="email_not_verified_message">Your email is not verified. Please click the link in the email.</string>
     <string name="reset_password_message">We\'ve sent you an email with a link to reset the password.</string>"
-    <string name="user_deleted_message">The user has been deleted.</string>
+    <string name="reauthentication_required_message">You need to reauthenticate before deleting the user.</string>
+    <string name="user_deleted_message">User successfully deleted.</string>
 </resources>

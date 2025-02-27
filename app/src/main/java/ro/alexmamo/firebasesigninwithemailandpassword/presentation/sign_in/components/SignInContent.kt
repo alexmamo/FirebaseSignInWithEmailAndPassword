@@ -26,8 +26,10 @@ const val VERTICAL_DIVIDER = "|"
 @Composable
 fun SignInContent(
     innerPadding: PaddingValues,
+    onEmptyEmail: () -> Unit,
+    onEmptyPassword: () -> Unit,
     onSigningIn: (String, String) -> Unit,
-    signingIn: Boolean,
+    isLoading: Boolean,
     onForgotPasswordTextClick: () -> Unit,
     onSignUpTextClick: () -> Unit
 ) {
@@ -64,10 +66,16 @@ fun SignInContent(
         )
         ActionButton(
             onActionButtonClick = {
-                onSigningIn(email.text, password.text)
-                keyboard?.hide()
+                if (email.text.isEmpty()) {
+                    onEmptyEmail()
+                } else if (password.text.isEmpty()) {
+                    onEmptyPassword()
+                } else {
+                    onSigningIn(email.text, password.text)
+                    keyboard?.hide()
+                }
             },
-            enabled = !signingIn,
+            enabled = !isLoading,
             resourceId = R.string.sign_in_button
         )
         Row {

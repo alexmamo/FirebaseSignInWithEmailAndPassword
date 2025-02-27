@@ -1,7 +1,13 @@
-package ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components
+package ro.alexmamo.firebasesigninwithemailandpassword.presentation.verify_email.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +21,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.R
 @Composable
 fun VerifyEmailContent(
     innerPadding: PaddingValues,
-    reloadUser: () -> Unit
+    onAlreadyVerifiedTextClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(innerPadding).padding(
@@ -27,7 +33,7 @@ fun VerifyEmailContent(
     ) {
         Text(
             modifier = Modifier.clickable {
-                reloadUser()
+                onAlreadyVerifiedTextClick()
             },
             text = stringResource(
                 id = R.string.already_verified

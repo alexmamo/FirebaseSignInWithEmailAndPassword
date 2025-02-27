@@ -9,11 +9,13 @@ import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Profile
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignIn
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignUp
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Splash
+import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.VerifyEmail
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.forgot_password.ForgotPasswordScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.ProfileScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.SignInScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up.SignUpScreen
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.splash.SplashScreen
+import ro.alexmamo.firebasesigninwithemailandpassword.presentation.verify_email.VerifyEmailScreen
 
 @Composable
 fun NavGraph(
@@ -42,6 +44,11 @@ fun NavGraph(
         composable<SignUp> {
             SignUpScreen(
                 navigateBack = navController::navigateUp,
+                navigateAndClear = navController::navigateAndClear
+            )
+        }
+        composable<VerifyEmail> {
+            VerifyEmailScreen(
                 navigateAndClear = navController::navigateAndClear
             )
         }

@@ -16,5 +16,8 @@ sealed interface Route {
     object SignUp : Route
 
     @Serializable
+    object VerifyEmail : Route
+
+    @Serializable
     object Profile : Route
 }

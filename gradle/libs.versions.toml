@@ -1,20 +1,14 @@
 [versions]
-#Android
-gradle = "8.7.2"
-#Kotlin
-kotlin = "2.0.21"
-#Ksp
-devtoolsKsp = "2.0.21-1.0.27"
-#Google
+gradle = "8.8.2"
+kotlin = "2.1.10"
+devtoolsKsp = "2.1.10-1.0.30"
 googleServices = "4.4.2"
-#Hilt
-hiltAndroid = "2.52"
-#Libraries
-composeBom = "2024.11.00"
+hilt = "2.55"
+composeBom = "2025.02.00"
 compose = "1.5.15"
-navigationCompose = "2.8.4"
+navigationCompose = "2.8.8"
 hiltNavigationCompose = "1.2.0"
-firebaseBom = "33.6.0"
+firebaseAuth = "23.2.0"
 serialization = "1.7.3"
 
 [plugins]
@@ -23,7 +17,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtoolsKsp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
@@ -32,8 +26,7 @@ compose-material = { module = "androidx.compose.material:material" }
 compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-auth = { module = "com.google.firebase:firebase-auth" }
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}

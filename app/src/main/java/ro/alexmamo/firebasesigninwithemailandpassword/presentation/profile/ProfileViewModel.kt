@@ -1,29 +1,24 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ro.alexmamo.firebasesigninwithemailandpassword.core.launchCatching
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import javax.inject.Inject
 
 typealias DeleteUserResponse = Response<Unit>
-typealias ReloadUserResponse = Response<Unit>
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
-    var deleteUserResponse by mutableStateOf<DeleteUserResponse>(Loading)
-        private set
-    var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Loading)
-        private set
+    private val _deleteUserState = MutableStateFlow<DeleteUserResponse>(Response.Idle)
+    val deleteUserState: StateFlow<DeleteUserResponse> = _deleteUserState.asStateFlow()
 
     fun getAuthState(navigateToSignInScreen: () -> Unit) = viewModelScope.launch {
         repo.getAuthState().collect { isUserSignedOut ->
@@ -34,18 +29,13 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun deleteUser() = viewModelScope.launch {
-        deleteUserResponse = launchCatching {
-            repo.deleteUser()
+        try {
+            _deleteUserState.value = Response.Loading
+            _deleteUserState.value = Response.Success(repo.deleteUser())
+        } catch (e: Exception) {
+            _deleteUserState.value = Response.Failure(e)
         }
     }
-
-    fun reloadUser() = viewModelScope.launch {
-        reloadUserResponse = launchCatching {
-            repo.reloadUser()
-        }
-    }
-
-    val isEmailVerified get() = repo.currentUser?.isEmailVerified == true
 
     fun signOut() = repo.signOut()
 }

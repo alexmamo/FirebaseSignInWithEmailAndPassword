@@ -1,52 +1,42 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile
 
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import ro.alexmamo.firebasesigninwithemailandpassword.R
 import ro.alexmamo.firebasesigninwithemailandpassword.components.LoadingIndicator
-import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.ProfileTopBar
-import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastError
+import ro.alexmamo.firebasesigninwithemailandpassword.core.logMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastMessage
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignIn
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.ProfileContent
-import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.VerifyEmailContent
-
-const val SIGN_OUT_ACTION_LABEL = "Sign out?"
-const val DELETE_USER_MESSAGE = "You need to re-authenticate before deleting the user."
-const val SENSITIVE_OPERATION_MESSAGE = "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
+import ro.alexmamo.firebasesigninwithemailandpassword.presentation.profile.components.ProfileTopBar
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateAndClear: (Route) -> Unit,
 ) {
-    val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    var isEmailVerified by remember { mutableStateOf(viewModel.isEmailVerified) }
-    var reloadingUser by remember { mutableStateOf(false) }
-    var deletingUser by remember { mutableStateOf(false) }
+    val resources = context.resources
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val deleteUserResponse by viewModel.deleteUserState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getAuthState(
             navigateToSignInScreen = {
-                navigateAndClear(SignIn)
+                navigateAndClear(Route.SignIn)
             }
         )
     }
@@ -59,69 +49,55 @@ fun ProfileScreen(
                 },
                 deleteUser = {
                     viewModel.deleteUser()
-                    deletingUser = true
                 }
             )
         },
-        scaffoldState = scaffoldState
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState
+            )
+        }
     ) { innerPadding ->
-        if (isEmailVerified) {
-            ProfileContent(
-                innerPadding = innerPadding
-            )
-        } else {
-            VerifyEmailContent(
-                innerPadding = innerPadding,
-                reloadUser = {
-                    viewModel.reloadUser()
-                    reloadingUser = true
-                }
-            )
-        }
+        ProfileContent(
+            innerPadding = innerPadding
+        )
     }
 
-    if (reloadingUser) {
-        when(val reloadUserResponse = viewModel.reloadUserResponse) {
-            is Loading -> LoadingIndicator()
-            is Success -> {
-                if (viewModel.isEmailVerified) {
-                    isEmailVerified = true
-                } else {
-                    showToastMessage(context, R.string.email_not_verified_message)
-                }
-                reloadingUser = false
-            }
-            is Failure -> reloadUserResponse.e.let { e ->
-                printError(e)
-                showToastError(context, e)
-                reloadingUser = false
-            }
-        }
-    }
-
-    fun showDeleteUserMessage() = coroutineScope.launch {
-        val result = scaffoldState.snackbarHostState.showSnackbar(
-            message = DELETE_USER_MESSAGE,
-            actionLabel = SIGN_OUT_ACTION_LABEL
+    fun showSnackbarMessage(
+        message: String,
+        actionLabel: String,
+        onActionClick: () -> Unit,
+    ) = coroutineScope.launch {
+        val result =  snackbarHostState.showSnackbar(
+            message = message,
+            actionLabel = actionLabel
         )
         if (result == SnackbarResult.ActionPerformed) {
-            viewModel.signOut()
+            onActionClick()
         }
     }
 
-    if (deletingUser) {
-        when(val deleteUserResponse = viewModel.deleteUserResponse) {
-            is Loading -> LoadingIndicator()
-            is Success -> {
-                showToastMessage(context, R.string.user_deleted_message)
-                deletingUser = false
-            }
-            is Failure -> deleteUserResponse.e.let { e ->
-                printError(e)
-                if (e.message == SENSITIVE_OPERATION_MESSAGE) {
-                    showDeleteUserMessage()
+    when(val deleteUserResponse = deleteUserResponse) {
+        is Response.Idle -> {}
+        is Response.Loading -> LoadingIndicator()
+        is Response.Success -> LaunchedEffect(Unit) {
+            showToastMessage(context, resources.getString(R.string.user_deleted_message))
+        }
+
+        is Response.Failure -> deleteUserResponse.e?.message?.let { errorMessage ->
+            LaunchedEffect(errorMessage) {
+                logMessage(errorMessage)
+                if (errorMessage.contains(resources.getString(R.string.sensitive_keyword))) {
+                    showSnackbarMessage(
+                        message = resources.getString(R.string.reauthentication_required_message),
+                        actionLabel = resources.getString(R.string.sign_out_action_label),
+                        onActionClick = {
+                            viewModel.signOut()
+                        }
+                    )
+                } else {
+                    showToastMessage(context, errorMessage)
                 }
-                deletingUser = false
             }
         }
     }

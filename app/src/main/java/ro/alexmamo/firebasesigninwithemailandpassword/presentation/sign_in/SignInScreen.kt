@@ -2,21 +2,18 @@ package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ro.alexmamo.firebasesigninwithemailandpassword.R
 import ro.alexmamo.firebasesigninwithemailandpassword.components.LoadingIndicator
-import ro.alexmamo.firebasesigninwithemailandpassword.core.printError
-import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastError
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Failure
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Loading
-import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response.Success
+import ro.alexmamo.firebasesigninwithemailandpassword.core.logMessage
+import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastMessage
+import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.ForgotPassword
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.Profile
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignUp
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInTopBar
@@ -28,7 +25,9 @@ fun SignInScreen(
     navigateAndClear: (Route) -> Unit
 ) {
     val context = LocalContext.current
-    var signingIn by remember { mutableStateOf(false) }
+    val resources = context.resources
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val signInResponse by viewModel.signInState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -37,11 +36,16 @@ fun SignInScreen(
     ) { innerPadding ->
         SignInContent(
             innerPadding = innerPadding,
+            onEmptyEmail = {
+                showToastMessage(context, resources.getString(R.string.empty_email_message))
+            },
+            onEmptyPassword = {
+                showToastMessage(context, resources.getString(R.string.empty_password_message))
+            },
             onSigningIn = { email, password ->
                 viewModel.signInWithEmailAndPassword(email, password)
-                signingIn = true
             },
-            signingIn = signingIn,
+            isLoading = isLoading,
             onForgotPasswordTextClick = {
                 navigate(ForgotPassword)
             },
@@ -51,17 +55,16 @@ fun SignInScreen(
         )
     }
 
-    if (signingIn) {
-        when(val signInResponse = viewModel.signInResponse) {
-            is Loading -> LoadingIndicator()
-            is Success -> {
-                navigateAndClear(Profile)
-                signingIn = false
-            }
-            is Failure -> signInResponse.e.let{ e ->
-                printError(e)
-                showToastError(context, e)
-                signingIn = false
+    when(val signInResponse = signInResponse) {
+        is Response.Idle -> {}
+        is Response.Loading -> LoadingIndicator()
+        is Response.Success -> LaunchedEffect(Unit) {
+            navigateAndClear(Route.Profile)
+        }
+        is Response.Failure -> signInResponse.e?.message?.let { errorMessage ->
+            LaunchedEffect(errorMessage) {
+                logMessage(errorMessage)
+                showToastMessage(context, errorMessage)
             }
         }
     }

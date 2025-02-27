@@ -10,4 +10,6 @@ class SplashViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
     val isUserSignedOut get() = repo.currentUser == null
+
+    val isEmailVerified get() = repo.currentUser?.isEmailVerified == true
 }

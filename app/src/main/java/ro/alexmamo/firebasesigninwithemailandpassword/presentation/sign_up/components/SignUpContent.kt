@@ -21,9 +21,10 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.EMPTY_STRING
 @Composable
 fun SignUpContent(
     innerPadding: PaddingValues,
+    onEmptyEmail: () -> Unit,
+    onEmptyPassword: () -> Unit,
     onSigningUp: (String, String) -> Unit,
-    signingUp: Boolean,
-    sendingEmailVerification: Boolean,
+    isLoading: Boolean,
     onSignInTextClick: () -> Unit
 ) {
     var email by rememberSaveable(
@@ -59,10 +60,16 @@ fun SignUpContent(
         )
         ActionButton(
             onActionButtonClick = {
-                onSigningUp(email.text, password.text)
-                keyboard?.hide()
+                if (email.text.isEmpty()) {
+                    onEmptyEmail()
+                } else if (password.text.isEmpty()) {
+                    onEmptyPassword()
+                } else {
+                    onSigningUp(email.text, password.text)
+                    keyboard?.hide()
+                }
             },
-            enabled = !signingUp && !sendingEmailVerification,
+            enabled = !isLoading,
             resourceId = R.string.sign_up_button
         )
         ActionText(
