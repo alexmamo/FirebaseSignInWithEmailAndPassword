@@ -3,10 +3,6 @@ package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.comp
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -19,26 +15,23 @@ import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionButton
 import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionText
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.PasswordField
-import ro.alexmamo.firebasesigninwithemailandpassword.core.EMPTY_STRING
 
 const val VERTICAL_DIVIDER = "|"
 
 @Composable
 fun SignInContent(
     innerPadding: PaddingValues,
+    email: TextFieldValue,
+    onEmailChange: (TextFieldValue) -> Unit,
     onEmptyEmail: () -> Unit,
+    password: TextFieldValue,
+    onPasswordChange: (TextFieldValue) -> Unit,
     onEmptyPassword: () -> Unit,
     onSigningIn: (String, String) -> Unit,
     isLoading: Boolean,
     onForgotPasswordTextClick: () -> Unit,
     onSignUpTextClick: () -> Unit
 ) {
-    var email by rememberSaveable(
-        stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(EMPTY_STRING)) }
-    var password by rememberSaveable(
-        stateSaver = TextFieldValue.Saver
-    ) { mutableStateOf(TextFieldValue(EMPTY_STRING)) }
     val keyboard = LocalSoftwareKeyboardController.current
 
     Column(
@@ -48,18 +41,14 @@ fun SignInContent(
     ) {
         EmailField(
             email = email,
-            onEmailValueChange = { newEmail ->
-                email = newEmail
-            }
+            onEmailChange = onEmailChange
         )
         Spacer(
             modifier = Modifier.height(8.dp)
         )
         PasswordField(
             password = password,
-            onPasswordValueChange = { newPassword ->
-                password = newPassword
-            }
+            onPasswordChange = onPasswordChange
         )
         Spacer(
             modifier = Modifier.height(8.dp)

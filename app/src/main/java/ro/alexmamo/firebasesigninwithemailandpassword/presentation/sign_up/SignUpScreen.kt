@@ -24,9 +24,11 @@ fun SignUpScreen(
 ) {
     val context = LocalContext.current
     val resources = context.resources
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
     val signUpResponse by viewModel.signUpState.collectAsStateWithLifecycle()
     val sendEmailVerificationResponse by viewModel.sendEmailVerificationState.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -37,15 +39,17 @@ fun SignUpScreen(
     ) { innerPadding ->
         SignUpContent(
             innerPadding = innerPadding,
+            email = email,
+            onEmailChange = viewModel::onEmailChange,
             onEmptyEmail = {
                 showToastMessage(context, resources.getString(R.string.empty_email_message))
             },
+            password = password,
+            onPasswordChange = viewModel::onPasswordChange,
             onEmptyPassword = {
                 showToastMessage(context, resources.getString(R.string.empty_password_message))
             },
-            onSigningUp = { email, password ->
-                viewModel.signUpWithEmailAndPassword(email, password)
-            },
+            onSigningUp = viewModel::signUpWithEmailAndPassword,
             isLoading = isLoading,
             onSignInTextClick = navigateBack
         )

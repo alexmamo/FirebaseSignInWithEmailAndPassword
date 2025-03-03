@@ -26,7 +26,8 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
     val resources = context.resources
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
     val signInResponse by viewModel.signInState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -36,16 +37,18 @@ fun SignInScreen(
     ) { innerPadding ->
         SignInContent(
             innerPadding = innerPadding,
+            email = email,
+            onEmailChange = viewModel::onEmailChange,
             onEmptyEmail = {
                 showToastMessage(context, resources.getString(R.string.empty_email_message))
             },
+            password = password,
+            onPasswordChange = viewModel::onPasswordChange,
             onEmptyPassword = {
                 showToastMessage(context, resources.getString(R.string.empty_password_message))
             },
-            onSigningIn = { email, password ->
-                viewModel.signInWithEmailAndPassword(email, password)
-            },
-            isLoading = isLoading,
+            onSigningIn = viewModel::signInWithEmailAndPassword,
+            isLoading = signInResponse is Response.Loading,
             onForgotPasswordTextClick = {
                 navigate(ForgotPassword)
             },
@@ -59,7 +62,11 @@ fun SignInScreen(
         is Response.Idle -> {}
         is Response.Loading -> LoadingIndicator()
         is Response.Success -> LaunchedEffect(Unit) {
-            navigateAndClear(Route.Profile)
+            if (viewModel.isEmailVerified) {
+                navigateAndClear(Route.Profile)
+            } else {
+                navigateAndClear(Route.VerifyEmail)
+            }
         }
         is Response.Failure -> signInResponse.e?.message?.let { errorMessage ->
             LaunchedEffect(errorMessage) {

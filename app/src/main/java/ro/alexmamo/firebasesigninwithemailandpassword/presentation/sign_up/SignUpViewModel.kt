@@ -1,5 +1,6 @@
 package ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_up
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ro.alexmamo.firebasesigninwithemailandpassword.core.EMPTY_STRING
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import javax.inject.Inject
@@ -18,6 +20,12 @@ typealias SendEmailVerificationResponse = Response<Unit>
 class SignUpViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
+    private val _email = MutableStateFlow(TextFieldValue(EMPTY_STRING))
+    val email: StateFlow<TextFieldValue> = _email.asStateFlow()
+
+    private val _password = MutableStateFlow(TextFieldValue(EMPTY_STRING))
+    val password: StateFlow<TextFieldValue> = _password.asStateFlow()
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
@@ -26,6 +34,14 @@ class SignUpViewModel @Inject constructor(
 
     private val _sendEmailVerificationState = MutableStateFlow<SendEmailVerificationResponse>(Response.Idle)
     val sendEmailVerificationState: StateFlow<SendEmailVerificationResponse> = _sendEmailVerificationState.asStateFlow()
+
+    fun onEmailChange(newEmail: TextFieldValue) {
+        _email.value = newEmail
+    }
+
+    fun onPasswordChange(newPassword: TextFieldValue) {
+        _password.value = newPassword
+    }
 
     fun signUpWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
         _isLoading.value = true

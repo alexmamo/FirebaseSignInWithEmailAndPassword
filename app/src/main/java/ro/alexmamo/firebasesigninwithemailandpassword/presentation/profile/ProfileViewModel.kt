@@ -17,16 +17,23 @@ typealias DeleteUserResponse = Response<Unit>
 class ProfileViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
+    private val _authState = MutableStateFlow<Boolean>(repo.currentUser == null)
+    val authState: StateFlow<Boolean> = _authState.asStateFlow()
+
     private val _deleteUserState = MutableStateFlow<DeleteUserResponse>(Response.Idle)
     val deleteUserState: StateFlow<DeleteUserResponse> = _deleteUserState.asStateFlow()
 
-    fun getAuthState(navigateToSignInScreen: () -> Unit) = viewModelScope.launch {
+    init {
+        getAuthState()
+    }
+
+    private fun getAuthState() = viewModelScope.launch {
         repo.getAuthState().collect { isUserSignedOut ->
-            if (isUserSignedOut) {
-                navigateToSignInScreen()
-            }
+            _authState.value = isUserSignedOut
         }
     }
+
+    fun signOut() = repo.signOut()
 
     fun deleteUser() = viewModelScope.launch {
         try {
@@ -36,6 +43,4 @@ class ProfileViewModel @Inject constructor(
             _deleteUserState.value = Response.Failure(e)
         }
     }
-
-    fun signOut() = repo.signOut()
 }

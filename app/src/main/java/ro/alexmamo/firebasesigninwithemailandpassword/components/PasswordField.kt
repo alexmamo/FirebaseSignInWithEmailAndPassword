@@ -19,15 +19,13 @@ import ro.alexmamo.firebasesigninwithemailandpassword.R
 @Composable
 fun PasswordField(
     password: TextFieldValue,
-    onPasswordValueChange: (newValue: TextFieldValue) -> Unit
+    onPasswordChange: (TextFieldValue) -> Unit
 ) {
     var passwordIsVisible by remember { mutableStateOf(false) }
 
     OutlinedTextField(
         value = password,
-        onValueChange = { newValue ->
-            onPasswordValueChange(newValue)
-        },
+        onValueChange = onPasswordChange,
         label = {
             Text(
                 text = stringResource(

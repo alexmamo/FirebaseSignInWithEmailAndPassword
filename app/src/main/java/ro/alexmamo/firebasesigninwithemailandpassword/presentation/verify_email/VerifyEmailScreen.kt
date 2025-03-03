@@ -33,9 +33,7 @@ fun VerifyEmailScreen(
     ) { innerPadding ->
         VerifyEmailContent(
             innerPadding = innerPadding,
-            onAlreadyVerifiedTextClick = {
-                viewModel.reloadUser()
-            }
+            onAlreadyVerifiedTextClick = viewModel::reloadUser
         )
     }
 

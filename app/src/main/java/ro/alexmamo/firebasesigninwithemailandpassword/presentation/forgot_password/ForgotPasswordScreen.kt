@@ -4,9 +4,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,9 +22,8 @@ fun ForgotPasswordScreen(
 ) {
     val context = LocalContext.current
     val resources = context.resources
+    val email by viewModel.email.collectAsStateWithLifecycle()
     val sendPasswordResetEmailResponse by viewModel.sendPasswordResetEmailState.collectAsStateWithLifecycle()
-    //Really needed?!?!?!
-    var sendingPasswordResetEmail by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -38,11 +34,13 @@ fun ForgotPasswordScreen(
     ) { innerPadding ->
         ForgotPasswordContent(
             innerPadding = innerPadding,
-            onSendingPasswordResetEmail = { email ->
-                viewModel.sendPasswordResetEmail(email)
-                sendingPasswordResetEmail = true
+            email = email,
+            onEmailChange = viewModel::onEmailChange,
+            onEmptyEmail = {
+                showToastMessage(context, resources.getString(R.string.empty_email_message))
             },
-            sendingPasswordResetEmail = sendingPasswordResetEmail
+            onSendingPasswordResetEmail = viewModel::sendPasswordResetEmail,
+            isLoading = sendPasswordResetEmailResponse is Response.Loading
         )
     }
 
@@ -52,12 +50,10 @@ fun ForgotPasswordScreen(
         is Response.Success -> LaunchedEffect(Unit) {
             showToastMessage(context, resources.getString(R.string.reset_password_message))
             navigateBack()
-            sendingPasswordResetEmail = false
         }
         is Response.Failure -> sendPasswordResetEmailResponse.e?.message?.let { errorMessage ->
             logMessage(errorMessage)
             showToastMessage(context, errorMessage)
-            sendingPasswordResetEmail = false
         }
     }
 }

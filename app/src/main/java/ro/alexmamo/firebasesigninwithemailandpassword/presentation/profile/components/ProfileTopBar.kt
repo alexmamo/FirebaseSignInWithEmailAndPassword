@@ -62,7 +62,7 @@ fun ProfileTopBar(
                 ) {
                     Text(
                         text = stringResource(
-                            id = R.string.sign_out_item
+                            id = R.string.sign_out
                         )
                     )
                 }
@@ -74,7 +74,7 @@ fun ProfileTopBar(
                 ) {
                     Text(
                         text = stringResource(
-                            id = R.string.delete_user_item
+                            id = R.string.delete_user
                         )
                     )
                 }

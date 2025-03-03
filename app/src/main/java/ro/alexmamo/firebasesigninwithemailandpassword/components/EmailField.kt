@@ -17,7 +17,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.R
 @Composable
 fun EmailField(
     email: TextFieldValue,
-    onEmailValueChange: (newValue: TextFieldValue) -> Unit
+    onEmailChange: (TextFieldValue) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -26,10 +26,9 @@ fun EmailField(
     }
 
     OutlinedTextField(
+        modifier = Modifier.focusRequester(focusRequester),
         value = email,
-        onValueChange = { newValue ->
-            onEmailValueChange(newValue)
-        },
+        onValueChange = onEmailChange,
         label = {
             Text(
                 text = stringResource(
@@ -40,7 +39,6 @@ fun EmailField(
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email
-        ),
-        modifier = Modifier.focusRequester(focusRequester)
+        )
     )
 }
