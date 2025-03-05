@@ -68,7 +68,7 @@ fun ProfileScreen(
                         actionLabel = resources.getString(R.string.sign_out_action_label)
                     )
                     if (result == SnackbarResult.ActionPerformed) {
-                        viewModel.signOut()
+                        viewModel::signOut
                     }
                 } else {
                     showToastMessage(context, errorMessage)

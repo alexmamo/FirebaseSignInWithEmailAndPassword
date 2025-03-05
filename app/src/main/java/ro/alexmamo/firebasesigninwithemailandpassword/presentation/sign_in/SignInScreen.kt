@@ -13,8 +13,6 @@ import ro.alexmamo.firebasesigninwithemailandpassword.core.logMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.ForgotPassword
-import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route.SignUp
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInContent
 import ro.alexmamo.firebasesigninwithemailandpassword.presentation.sign_in.components.SignInTopBar
 
@@ -50,10 +48,10 @@ fun SignInScreen(
             onSigningIn = viewModel::signInWithEmailAndPassword,
             isLoading = signInResponse is Response.Loading,
             onForgotPasswordTextClick = {
-                navigate(ForgotPassword)
+                navigate(Route.ForgotPassword)
             },
             onSignUpTextClick = {
-                navigate(SignUp)
+                navigate(Route.SignUp)
             }
         )
     }

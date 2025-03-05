@@ -2,8 +2,7 @@ package ro.alexmamo.firebasesigninwithemailandpassword.core
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.makeText
+import android.widget.Toast
 
 const val TAG = "AppTag"
 const val EMPTY_STRING = ""
@@ -15,4 +14,4 @@ fun logMessage(
 fun showToastMessage(
     context: Context,
     message: String
-) = makeText(context, message, LENGTH_LONG).show()
+) = Toast.makeText(context, message, Toast.LENGTH_LONG).show()
