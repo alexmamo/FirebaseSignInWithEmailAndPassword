@@ -7,9 +7,9 @@ import android.widget.Toast
 const val TAG = "AppTag"
 const val EMPTY_STRING = ""
 
-fun logMessage(
-    message: String
-) = Log.e(TAG, message)
+fun logErrorMessage(
+    errorMessage: String
+) = Log.e(TAG, errorMessage)
 
 fun showToastMessage(
     context: Context,

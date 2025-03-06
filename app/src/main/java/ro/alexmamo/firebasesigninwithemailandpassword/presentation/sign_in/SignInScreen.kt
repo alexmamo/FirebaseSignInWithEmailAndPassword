@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ro.alexmamo.firebasesigninwithemailandpassword.R
 import ro.alexmamo.firebasesigninwithemailandpassword.components.LoadingIndicator
-import ro.alexmamo.firebasesigninwithemailandpassword.core.logMessage
+import ro.alexmamo.firebasesigninwithemailandpassword.core.logErrorMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.core.showToastMessage
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.navigation.Route
@@ -70,7 +70,7 @@ fun SignInScreen(
         }
         is Response.Failure -> signInResponse.e?.message?.let { errorMessage ->
             LaunchedEffect(errorMessage) {
-                logMessage(errorMessage)
+                logErrorMessage(errorMessage)
                 showToastMessage(context, errorMessage)
             }
         }
