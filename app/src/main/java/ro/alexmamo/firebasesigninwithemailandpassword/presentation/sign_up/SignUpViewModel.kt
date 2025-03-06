@@ -14,7 +14,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepo
 import javax.inject.Inject
 
 typealias SignUpResponse = Response<Unit>
-typealias SendEmailVerificationResponse = Response<Unit>
+typealias EmailVerificationResponse = Response<Unit>
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
@@ -32,8 +32,8 @@ class SignUpViewModel @Inject constructor(
     private val _signUpState = MutableStateFlow<SignUpResponse>(Response.Idle)
     val signUpState: StateFlow<SignUpResponse> = _signUpState.asStateFlow()
 
-    private val _sendEmailVerificationState = MutableStateFlow<SendEmailVerificationResponse>(Response.Idle)
-    val sendEmailVerificationState: StateFlow<SendEmailVerificationResponse> = _sendEmailVerificationState.asStateFlow()
+    private val _emailVerificationState = MutableStateFlow<EmailVerificationResponse>(Response.Idle)
+    val emailVerificationState: StateFlow<EmailVerificationResponse> = _emailVerificationState.asStateFlow()
 
     fun onEmailChange(newEmail: TextFieldValue) {
         _email.value = newEmail
@@ -56,10 +56,10 @@ class SignUpViewModel @Inject constructor(
 
     fun sendEmailVerification() = viewModelScope.launch {
         try {
-            _sendEmailVerificationState.value = Response.Loading
-            _sendEmailVerificationState.value = Response.Success(repo.sendEmailVerification())
+            _emailVerificationState.value = Response.Loading
+            _emailVerificationState.value = Response.Success(repo.sendEmailVerification())
         } catch (e: Exception) {
-            _sendEmailVerificationState.value = Response.Failure(e)
+            _emailVerificationState.value = Response.Failure(e)
         } finally {
             _isLoading.value = false
         }

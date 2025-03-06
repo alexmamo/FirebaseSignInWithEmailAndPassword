@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ro.alexmamo.firebasesigninwithemailandpassword.R
@@ -21,9 +22,10 @@ fun ForgotPasswordScreen(
     navigateBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val resources = context.resources
     val email by viewModel.email.collectAsStateWithLifecycle()
-    val sendPasswordResetEmailResponse by viewModel.sendPasswordResetEmailState.collectAsStateWithLifecycle()
+    val passwordResetEmailResponse by viewModel.passwordResetEmailState.collectAsStateWithLifecycle()
+    val invalidEmailMessage = stringResource(R.string.invalid_email_message)
+    val resetPasswordMessage = stringResource(R.string.reset_password_message)
 
     Scaffold(
         topBar = {
@@ -36,19 +38,19 @@ fun ForgotPasswordScreen(
             innerPadding = innerPadding,
             email = email,
             onEmailChange = viewModel::onEmailChange,
-            onEmptyEmail = {
-                showToastMessage(context, resources.getString(R.string.empty_email_message))
+            onEmailInvalid = {
+                showToastMessage(context, invalidEmailMessage)
             },
-            onSendingPasswordResetEmail = viewModel::sendPasswordResetEmail,
-            isLoading = sendPasswordResetEmailResponse is Response.Loading
+            onSendPasswordResetEmail = viewModel::sendPasswordResetEmail,
+            isLoading = passwordResetEmailResponse is Response.Loading
         )
     }
 
-    when(val sendPasswordResetEmailResponse = sendPasswordResetEmailResponse) {
+    when(val sendPasswordResetEmailResponse = passwordResetEmailResponse) {
         is Response.Idle -> {}
         is Response.Loading -> LoadingIndicator()
         is Response.Success -> LaunchedEffect(Unit) {
-            showToastMessage(context, resources.getString(R.string.reset_password_message))
+            showToastMessage(context, resetPasswordMessage)
             navigateBack()
         }
         is Response.Failure -> sendPasswordResetEmailResponse.e?.message?.let { errorMessage ->

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ro.alexmamo.firebasesigninwithemailandpassword.R
@@ -23,10 +24,11 @@ fun SignInScreen(
     navigateAndClear: (Route) -> Unit
 ) {
     val context = LocalContext.current
-    val resources = context.resources
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
     val signInResponse by viewModel.signInState.collectAsStateWithLifecycle()
+    val invalidEmailMessage = stringResource(R.string.invalid_email_message)
+    val invalidPasswordMessage = stringResource(R.string.invalid_password_message)
 
     Scaffold(
         topBar = {
@@ -37,15 +39,15 @@ fun SignInScreen(
             innerPadding = innerPadding,
             email = email,
             onEmailChange = viewModel::onEmailChange,
-            onEmptyEmail = {
-                showToastMessage(context, resources.getString(R.string.empty_email_message))
+            onEmailInvalid = {
+                showToastMessage(context, invalidEmailMessage)
             },
             password = password,
             onPasswordChange = viewModel::onPasswordChange,
-            onEmptyPassword = {
-                showToastMessage(context, resources.getString(R.string.empty_password_message))
+            onPasswordInvalid = {
+                showToastMessage(context, invalidPasswordMessage)
             },
-            onSigningIn = viewModel::signInWithEmailAndPassword,
+            onSignIn = viewModel::signInWithEmailAndPassword,
             isLoading = signInResponse is Response.Loading,
             onForgotPasswordTextClick = {
                 navigate(Route.ForgotPassword)

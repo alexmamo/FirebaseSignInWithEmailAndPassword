@@ -23,11 +23,11 @@ fun SignInContent(
     innerPadding: PaddingValues,
     email: TextFieldValue,
     onEmailChange: (TextFieldValue) -> Unit,
-    onEmptyEmail: () -> Unit,
+    onEmailInvalid: () -> Unit,
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
-    onEmptyPassword: () -> Unit,
-    onSigningIn: (String, String) -> Unit,
+    onPasswordInvalid: () -> Unit,
+    onSignIn: (String, String) -> Unit,
     isLoading: Boolean,
     onForgotPasswordTextClick: () -> Unit,
     onSignUpTextClick: () -> Unit
@@ -55,13 +55,18 @@ fun SignInContent(
         )
         ActionButton(
             onActionButtonClick = {
-                if (email.text.isEmpty()) {
-                    onEmptyEmail()
-                } else if (password.text.isEmpty()) {
-                    onEmptyPassword()
-                } else {
-                    onSigningIn(email.text, password.text)
+                val isEmailValid = email.text.isNotBlank()
+                val isPasswordValid = password.text.isNotBlank()
+                if (isEmailValid && isPasswordValid) {
+                    onSignIn(email.text, password.text)
                     keyboard?.hide()
+                } else {
+                    if (!isEmailValid) {
+                        onEmailInvalid()
+                    }
+                    if (!isPasswordValid) {
+                        onPasswordInvalid()
+                    }
                 }
             },
             enabled = !isLoading,

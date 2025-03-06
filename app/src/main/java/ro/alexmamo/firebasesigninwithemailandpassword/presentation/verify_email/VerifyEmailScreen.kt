@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ro.alexmamo.firebasesigninwithemailandpassword.R
@@ -22,9 +23,9 @@ fun VerifyEmailScreen(
     navigateAndClear: (Route) -> Unit,
 ) {
     val context = LocalContext.current
-    val resources = context.resources
     val reloadUserResponse by viewModel.reloadUserState.collectAsStateWithLifecycle()
     val isEmailVerified by viewModel.isEmailVerifiedState.collectAsStateWithLifecycle()
+    val emailNotVerifiedMessage = stringResource(R.string.email_not_verified_message)
 
     Scaffold(
         topBar = {
@@ -44,7 +45,7 @@ fun VerifyEmailScreen(
             if (isEmailVerified) {
                 navigateAndClear(Route.Profile)
             } else {
-                showToastMessage(context, resources.getString(R.string.email_not_verified_message))
+                showToastMessage(context, emailNotVerifiedMessage)
             }
         }
         is Response.Failure -> reloadUserResponse.e?.message?.let { errorMessage ->

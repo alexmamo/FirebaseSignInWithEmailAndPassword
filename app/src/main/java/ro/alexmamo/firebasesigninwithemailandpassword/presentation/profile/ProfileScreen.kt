@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ro.alexmamo.firebasesigninwithemailandpassword.R
@@ -26,10 +27,13 @@ fun ProfileScreen(
     navigateAndClear: (Route) -> Unit
 ) {
     val context = LocalContext.current
-    val resources = context.resources
     val snackbarHostState = remember { SnackbarHostState() }
     val isUserSignedOut by viewModel.authState.collectAsStateWithLifecycle()
     val deleteUserResponse by viewModel.deleteUserState.collectAsStateWithLifecycle()
+    val userDeletedMessage = stringResource(R.string.user_deleted_message)
+    val sensitiveKeyword = stringResource(R.string.sensitive_keyword)
+    val reauthenticationRequiredMessage = stringResource(R.string.reauthentication_required_message)
+    val signOutActionLabel = stringResource(R.string.sign_out_action_label)
 
     Scaffold(
         topBar = {
@@ -57,15 +61,15 @@ fun ProfileScreen(
         is Response.Idle -> {}
         is Response.Loading -> LoadingIndicator()
         is Response.Success -> LaunchedEffect(Unit) {
-            showToastMessage(context, resources.getString(R.string.user_deleted_message))
+            showToastMessage(context, userDeletedMessage)
         }
         is Response.Failure -> deleteUserResponse.e?.message?.let { errorMessage ->
             LaunchedEffect(errorMessage) {
                 logMessage(errorMessage)
-                if (errorMessage.contains(resources.getString(R.string.sensitive_keyword))) {
+                if (errorMessage.contains(sensitiveKeyword)) {
                     val result =  snackbarHostState.showSnackbar(
-                        message = resources.getString(R.string.reauthentication_required_message),
-                        actionLabel = resources.getString(R.string.sign_out_action_label)
+                        message = reauthenticationRequiredMessage,
+                        actionLabel = signOutActionLabel
                     )
                     if (result == SnackbarResult.ActionPerformed) {
                         viewModel::signOut

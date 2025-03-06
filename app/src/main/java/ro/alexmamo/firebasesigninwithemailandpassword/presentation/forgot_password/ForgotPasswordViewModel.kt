@@ -13,7 +13,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.domain.model.Response
 import ro.alexmamo.firebasesigninwithemailandpassword.domain.repository.AuthRepository
 import javax.inject.Inject
 
-typealias SendPasswordResetEmailResponse = Response<Unit>
+typealias PasswordResetEmailResponse = Response<Unit>
 
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
@@ -22,8 +22,8 @@ class ForgotPasswordViewModel @Inject constructor(
     private val _email = MutableStateFlow(TextFieldValue(EMPTY_STRING))
     val email: StateFlow<TextFieldValue> = _email.asStateFlow()
 
-    private val _sendPasswordResetEmailState = MutableStateFlow<SendPasswordResetEmailResponse>(Response.Idle)
-    val sendPasswordResetEmailState: StateFlow<SendPasswordResetEmailResponse> = _sendPasswordResetEmailState.asStateFlow()
+    private val _passwordResetEmailState = MutableStateFlow<PasswordResetEmailResponse>(Response.Idle)
+    val passwordResetEmailState: StateFlow<PasswordResetEmailResponse> = _passwordResetEmailState.asStateFlow()
 
     fun onEmailChange(newEmail: TextFieldValue) {
         _email.value = newEmail
@@ -31,10 +31,10 @@ class ForgotPasswordViewModel @Inject constructor(
 
     fun sendPasswordResetEmail(email: String) = viewModelScope.launch {
         try {
-            _sendPasswordResetEmailState.value = Response.Loading
-            _sendPasswordResetEmailState.value = Response.Success(repo.sendPasswordResetEmail(email))
+            _passwordResetEmailState.value = Response.Loading
+            _passwordResetEmailState.value = Response.Success(repo.sendPasswordResetEmail(email))
         } catch (e: Exception) {
-            _sendPasswordResetEmailState.value = Response.Failure(e)
+            _passwordResetEmailState.value = Response.Failure(e)
         }
     }
 }

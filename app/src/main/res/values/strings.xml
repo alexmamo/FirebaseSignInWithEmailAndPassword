@@ -29,9 +29,9 @@
     <!--Keywords-->
     <string name="sensitive_keyword">sensitive</string>
     <!--Messages-->
-    <string name="empty_email_message">Email cannot be empty.</string>
-    <string name="empty_password_message">Password cannot be empty.</string>
-    <string name="account_created_message">Your account has bee successfully created.</string>
+    <string name="invalid_email_message">Email cannot be empty or contain only whitespace.</string>
+    <string name="invalid_password_message">Password cannot be empty or contain only whitespace.</string>
+    <string name="account_created_message">Your account has been successfully created.</string>
     <string name="email_verification_sent_message">We\'ve sent you an email with a link to verify the email.</string>
     <string name="email_not_verified_message">Your email is not verified. Please click the link in the email.</string>
     <string name="reset_password_message">We\'ve sent you an email with a link to reset the password.</string>"

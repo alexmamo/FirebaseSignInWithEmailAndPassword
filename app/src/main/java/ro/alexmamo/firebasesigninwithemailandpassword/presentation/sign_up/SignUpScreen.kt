@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ro.alexmamo.firebasesigninwithemailandpassword.R
@@ -23,12 +24,15 @@ fun SignUpScreen(
     navigateAndClear: (Route) -> Unit
 ) {
     val context = LocalContext.current
-    val resources = context.resources
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
     val signUpResponse by viewModel.signUpState.collectAsStateWithLifecycle()
-    val sendEmailVerificationResponse by viewModel.sendEmailVerificationState.collectAsStateWithLifecycle()
+    val emailVerificationResponse by viewModel.emailVerificationState.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val invalidEmailMessage = stringResource(R.string.invalid_email_message)
+    val invalidPasswordMessage = stringResource(R.string.invalid_password_message)
+    val accountCreatedMessage = stringResource(R.string.account_created_message)
+    val emailVerificationSentMessage = stringResource(R.string.email_verification_sent_message)
 
     Scaffold(
         topBar = {
@@ -41,15 +45,15 @@ fun SignUpScreen(
             innerPadding = innerPadding,
             email = email,
             onEmailChange = viewModel::onEmailChange,
-            onEmptyEmail = {
-                showToastMessage(context, resources.getString(R.string.empty_email_message))
+            onEmailInvalid = {
+                showToastMessage(context, invalidEmailMessage)
             },
             password = password,
             onPasswordChange = viewModel::onPasswordChange,
-            onEmptyPassword = {
-                showToastMessage(context, resources.getString(R.string.empty_password_message))
+            onPasswordInvalid = {
+                showToastMessage(context, invalidPasswordMessage)
             },
-            onSigningUp = viewModel::signUpWithEmailAndPassword,
+            onSignUp = viewModel::signUpWithEmailAndPassword,
             isLoading = isLoading,
             onSignInTextClick = navigateBack
         )
@@ -59,7 +63,7 @@ fun SignUpScreen(
         is Response.Idle -> {}
         is Response.Loading -> LoadingIndicator()
         is Response.Success -> LaunchedEffect(Unit) {
-            showToastMessage(context, resources.getString(R.string.account_created_message))
+            showToastMessage(context, accountCreatedMessage)
             viewModel.sendEmailVerification()
         }
         is Response.Failure -> signUpResponse.e?.message?.let { errorMessage ->
@@ -70,14 +74,14 @@ fun SignUpScreen(
         }
     }
 
-    when(val sendEmailVerificationResponse = sendEmailVerificationResponse) {
+    when(val emailVerificationResponse = emailVerificationResponse) {
         is Response.Idle -> {}
         is Response.Loading -> LoadingIndicator()
         is Response.Success -> LaunchedEffect(Unit) {
-            showToastMessage(context, resources.getString(R.string.email_verification_sent_message))
+            showToastMessage(context, emailVerificationSentMessage)
             navigateAndClear(Route.VerifyEmail)
         }
-        is Response.Failure -> sendEmailVerificationResponse.e?.message?.let { errorMessage ->
+        is Response.Failure -> emailVerificationResponse.e?.message?.let { errorMessage ->
             LaunchedEffect(errorMessage) {
                 logMessage(errorMessage)
                 showToastMessage(context, errorMessage)

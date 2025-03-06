@@ -15,8 +15,8 @@ fun ForgotPasswordContent(
     innerPadding: PaddingValues,
     email: TextFieldValue,
     onEmailChange: (TextFieldValue) -> Unit,
-    onEmptyEmail: () -> Unit,
-    onSendingPasswordResetEmail: (String) -> Unit,
+    onEmailInvalid: () -> Unit,
+    onSendPasswordResetEmail: (String) -> Unit,
     isLoading: Boolean,
 ) {
     Column(
@@ -33,10 +33,11 @@ fun ForgotPasswordContent(
         )
         ActionButton(
             onActionButtonClick = {
-                if (email.text.isEmpty()) {
-                    onEmptyEmail()
+                val isEmailInvalid = email.text.isBlank()
+                if (isEmailInvalid) {
+                    onEmailInvalid()
                 } else {
-                    onSendingPasswordResetEmail(email.text)
+                    onSendPasswordResetEmail(email.text)
                 }
             },
             enabled = !isLoading,
