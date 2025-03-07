@@ -33,8 +33,8 @@ fun ForgotPasswordContent(
         )
         ActionButton(
             onActionButtonClick = {
-                val isEmailInvalid = email.text.isBlank()
-                if (isEmailInvalid) {
+                val isEmailValid = email.text.isNotBlank()
+                if (!isEmailValid) {
                     onEmailInvalid()
                 } else {
                     onSendPasswordResetEmail(email.text)

@@ -51,16 +51,13 @@ fun SignUpContent(
             onActionButtonClick = {
                 val isEmailValid = email.text.isNotBlank()
                 val isPasswordValid = password.text.isNotBlank()
-                if (isEmailValid && isPasswordValid) {
+                if (!isEmailValid) {
+                    onEmailInvalid()
+                } else if (!isPasswordValid) {
+                    onPasswordInvalid()
+                } else {
                     onSignUp(email.text, password.text)
                     keyboard?.hide()
-                } else {
-                    if (!isEmailValid) {
-                        onEmailInvalid()
-                    }
-                    if (!isPasswordValid) {
-                        onPasswordInvalid()
-                    }
                 }
             },
             enabled = !isLoading,
