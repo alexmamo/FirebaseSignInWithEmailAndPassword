@@ -16,7 +16,7 @@ import ro.alexmamo.firebasesigninwithemailandpassword.components.ActionText
 import ro.alexmamo.firebasesigninwithemailandpassword.components.EmailField
 import ro.alexmamo.firebasesigninwithemailandpassword.components.PasswordField
 
-const val VERTICAL_DIVIDER = "|"
+private const val VERTICAL_DIVIDER = "|"
 
 @Composable
 fun SignInContent(
